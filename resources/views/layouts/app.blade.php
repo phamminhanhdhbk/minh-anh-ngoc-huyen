@@ -132,7 +132,7 @@
                         <li class="nav-item me-3">
                             <a href="{{ route('cart.index') }}" class="btn btn-outline-light position-relative">
                                 <i class="fas fa-shopping-cart"></i>
-                                <span class="cart-badge" id="cart-count">0</span>
+                                <span class="cart-badge cart-count" id="cart-count">0</span>
                             </a>
                         </li>
                         @endif
@@ -260,6 +260,12 @@
         function updateCartCount() {
             $.get('{{ route("cart.count") }}', function(data) {
                 $('#cart-count').text(data.count);
+                $('.cart-count').text(data.count);
+                if (data.count > 0) {
+                    $('.cart-count').show();
+                } else {
+                    $('.cart-count').text('0');
+                }
             });
         }
 

@@ -53,6 +53,11 @@ Route::middleware('auth')->group(function () {
 // Public review routes
 Route::get('/products/{product}/reviews', 'ReviewController@productReviews')->name('reviews.product');
 
+// Blog routes (public)
+Route::get('/blog', 'BlogController@index')->name('blog.index');
+Route::get('/blog/{slug}', 'BlogController@show')->name('blog.show');
+Route::post('/blog/{post}/comment', 'BlogController@storeComment')->name('blog.comment');
+
 Auth::routes();
 
 // Dashboard route (old /home)
@@ -99,4 +104,15 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::patch('reviews/{review}/approve', 'Admin\ReviewController@approve')->name('reviews.approve');
     Route::patch('reviews/{review}/reject', 'Admin\ReviewController@reject')->name('reviews.reject');
     Route::delete('reviews/{review}', 'Admin\ReviewController@destroy')->name('reviews.destroy');
+
+    // Blog Management
+    Route::resource('blog-categories', 'Admin\BlogCategoryController');
+    Route::resource('posts', 'Admin\PostController');
+    Route::resource('post-tags', 'Admin\PostTagController');
+
+    // Post Comments Management
+    Route::get('post-comments', 'Admin\PostCommentController@index')->name('post-comments.index');
+    Route::patch('post-comments/{comment}/approve', 'Admin\PostCommentController@approve')->name('post-comments.approve');
+    Route::patch('post-comments/{comment}/reject', 'Admin\PostCommentController@reject')->name('post-comments.reject');
+    Route::delete('post-comments/{comment}', 'Admin\PostCommentController@destroy')->name('post-comments.destroy');
 });
