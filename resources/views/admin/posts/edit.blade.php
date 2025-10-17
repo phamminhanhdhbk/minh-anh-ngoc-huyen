@@ -25,7 +25,7 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label for="title">Tiêu đề <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control @error('title') is-invalid @enderror" 
+                            <input type="text" class="form-control @error('title') is-invalid @enderror"
                                    id="title" name="title" value="{{ old('title', $post->title) }}" required>
                             @error('title')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -34,8 +34,8 @@
 
                         <div class="form-group">
                             <label for="slug">Slug (URL)</label>
-                            <input type="text" class="form-control @error('slug') is-invalid @enderror" 
-                                   id="slug" name="slug" value="{{ old('slug', $post->slug) }}" 
+                            <input type="text" class="form-control @error('slug') is-invalid @enderror"
+                                   id="slug" name="slug" value="{{ old('slug', $post->slug) }}"
                                    placeholder="Để trống để tự động tạo từ tiêu đề">
                             @error('slug')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -44,7 +44,7 @@
 
                         <div class="form-group">
                             <label for="excerpt">Tóm tắt</label>
-                            <textarea class="form-control @error('excerpt') is-invalid @enderror" 
+                            <textarea class="form-control @error('excerpt') is-invalid @enderror"
                                       id="excerpt" name="excerpt" rows="3">{{ old('excerpt', $post->excerpt) }}</textarea>
                             @error('excerpt')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -54,7 +54,7 @@
 
                         <div class="form-group">
                             <label for="content">Nội dung <span class="text-danger">*</span></label>
-                            <textarea class="form-control @error('content') is-invalid @enderror" 
+                            <textarea class="form-control @error('content') is-invalid @enderror"
                                       id="content" name="content" rows="15" required>{{ old('content', $post->content) }}</textarea>
                             @error('content')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -109,7 +109,7 @@
 
                         <div class="form-group">
                             <label for="published_at">Ngày xuất bản</label>
-                            <input type="datetime-local" class="form-control @error('published_at') is-invalid @enderror" 
+                            <input type="datetime-local" class="form-control @error('published_at') is-invalid @enderror"
                                    id="published_at" name="published_at" value="{{ old('published_at', $post->published_at ? $post->published_at->format('Y-m-d\TH:i') : '') }}">
                             @error('published_at')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -119,7 +119,7 @@
 
                         <div class="form-group">
                             <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="featured" 
+                                <input type="checkbox" class="custom-control-input" id="featured"
                                        name="featured" value="1" {{ old('featured', $post->featured) ? 'checked' : '' }}>
                                 <label class="custom-control-label" for="featured">
                                     <i class="fas fa-star text-warning"></i> Bài viết nổi bật
@@ -141,7 +141,7 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label for="blog_category_id">Danh mục <span class="text-danger">*</span></label>
-                            <select class="form-control @error('blog_category_id') is-invalid @enderror" 
+                            <select class="form-control @error('blog_category_id') is-invalid @enderror"
                                     id="blog_category_id" name="blog_category_id" required>
                                 <option value="">-- Chọn danh mục --</option>
                                 @foreach($categories as $category)
@@ -169,7 +169,7 @@
                         @endif
                         <div class="form-group">
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input @error('featured_image') is-invalid @enderror" 
+                                <input type="file" class="custom-file-input @error('featured_image') is-invalid @enderror"
                                        id="featured_image" name="featured_image" accept="image/*" onchange="previewImage(this)">
                                 <label class="custom-file-label" for="featured_image">Chọn ảnh...</label>
                                 @error('featured_image')
@@ -191,7 +191,7 @@
                         <div class="form-group">
                             @foreach($tags as $tag)
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" 
+                                    <input type="checkbox" class="custom-control-input"
                                            id="tag_{{ $tag->id }}" name="tags[]" value="{{ $tag->id }}"
                                            {{ in_array($tag->id, old('tags', $post->tags->pluck('id')->toArray())) ? 'checked' : '' }}>
                                     <label class="custom-control-label" for="tag_{{ $tag->id }}">
@@ -225,7 +225,7 @@ function previewImage(input) {
             $('#imagePreview').show();
         }
         reader.readAsDataURL(input.files[0]);
-        
+
         var fileName = input.files[0].name;
         $(input).next('.custom-file-label').html(fileName);
     }

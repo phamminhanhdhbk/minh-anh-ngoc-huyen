@@ -24,7 +24,7 @@
                     <div class="col-md-8">
                         <div class="form-group">
                             <label for="name">Tên danh mục <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control @error('name') is-invalid @enderror" 
+                            <input type="text" class="form-control @error('name') is-invalid @enderror"
                                    id="name" name="name" value="{{ old('name') }}" required>
                             @error('name')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -33,8 +33,8 @@
 
                         <div class="form-group">
                             <label for="slug">Slug (URL)</label>
-                            <input type="text" class="form-control @error('slug') is-invalid @enderror" 
-                                   id="slug" name="slug" value="{{ old('slug') }}" 
+                            <input type="text" class="form-control @error('slug') is-invalid @enderror"
+                                   id="slug" name="slug" value="{{ old('slug') }}"
                                    placeholder="Để trống để tự động tạo từ tên">
                             @error('slug')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -44,7 +44,7 @@
 
                         <div class="form-group">
                             <label for="description">Mô tả</label>
-                            <textarea class="form-control @error('description') is-invalid @enderror" 
+                            <textarea class="form-control @error('description') is-invalid @enderror"
                                       id="description" name="description" rows="4">{{ old('description') }}</textarea>
                             @error('description')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -56,7 +56,7 @@
                         <div class="form-group">
                             <label for="image">Hình ảnh</label>
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input @error('image') is-invalid @enderror" 
+                                <input type="file" class="custom-file-input @error('image') is-invalid @enderror"
                                        id="image" name="image" accept="image/*" onchange="previewImage(this)">
                                 <label class="custom-file-label" for="image">Chọn hình ảnh...</label>
                                 @error('image')
@@ -70,7 +70,7 @@
 
                         <div class="form-group">
                             <label for="order">Thứ tự hiển thị</label>
-                            <input type="number" class="form-control @error('order') is-invalid @enderror" 
+                            <input type="number" class="form-control @error('order') is-invalid @enderror"
                                    id="order" name="order" value="{{ old('order', 0) }}" min="0">
                             @error('order')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -79,7 +79,7 @@
 
                         <div class="form-group">
                             <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="status" 
+                                <input type="checkbox" class="custom-control-input" id="status"
                                        name="status" value="1" {{ old('status', 1) ? 'checked' : '' }}>
                                 <label class="custom-control-label" for="status">Hiển thị danh mục</label>
                             </div>
@@ -110,7 +110,7 @@ function previewImage(input) {
             $('#imagePreview').show();
         }
         reader.readAsDataURL(input.files[0]);
-        
+
         // Update label
         var fileName = input.files[0].name;
         $(input).next('.custom-file-label').html(fileName);

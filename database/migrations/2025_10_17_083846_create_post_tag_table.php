@@ -16,10 +16,10 @@ class CreatePostTagTable extends Migration
         Schema::create('post_tag', function (Blueprint $table) {
             $table->unsignedBigInteger('post_id');
             $table->unsignedBigInteger('post_tag_id');
-            
+
             $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
             $table->foreign('post_tag_id')->references('id')->on('post_tags')->onDelete('cascade');
-            
+
             $table->primary(['post_id', 'post_tag_id']);
         });
     }

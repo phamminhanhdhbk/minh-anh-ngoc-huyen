@@ -34,37 +34,37 @@
                                     <i class="fas fa-image fa-3x text-muted"></i>
                                 </div>
                             @endif
-                            
+
                             <div class="card-body">
                                 @if($post->featured)
                                     <span class="badge badge-warning mb-2">
                                         <i class="fas fa-star"></i> Nổi bật
                                     </span>
                                 @endif
-                                
+
                                 <h5 class="card-title">
                                     <a href="{{ route('blog.show', $post->slug) }}" class="text-dark">
                                         {{ $post->title }}
                                     </a>
                                 </h5>
-                                
+
                                 <p class="card-text text-muted small">
-                                    <i class="fas fa-user"></i> {{ $post->author->name ?? 'Admin' }} | 
-                                    <i class="fas fa-calendar"></i> {{ $post->published_at->format('d/m/Y') }} | 
+                                    <i class="fas fa-user"></i> {{ $post->author->name ?? 'Admin' }} |
+                                    <i class="fas fa-calendar"></i> {{ $post->published_at->format('d/m/Y') }} |
                                     <i class="fas fa-eye"></i> {{ $post->views }} lượt xem
                                 </p>
-                                
+
                                 @if($post->excerpt)
                                     <p class="card-text">{{ Str::limit($post->excerpt, 120) }}</p>
                                 @endif
-                                
+
                                 <div class="mt-2">
                                     <a href="{{ route('blog.index', ['category' => $post->category->slug]) }}" class="badge badge-primary">
                                         {{ $post->category->name }}
                                     </a>
                                 </div>
                             </div>
-                            
+
                             <div class="card-footer bg-white">
                                 <a href="{{ route('blog.show', $post->slug) }}" class="btn btn-sm btn-outline-primary">
                                     Đọc tiếp <i class="fas fa-arrow-right"></i>
@@ -112,7 +112,7 @@
                     <h5 class="card-title">Danh mục</h5>
                     <div class="list-group list-group-flush">
                         @foreach($categories as $category)
-                            <a href="{{ route('blog.index', ['category' => $category->slug]) }}" 
+                            <a href="{{ route('blog.index', ['category' => $category->slug]) }}"
                                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                                 {{ $category->name }}
                                 <span class="badge badge-primary badge-pill">{{ $category->published_posts_count ?? 0 }}</span>
@@ -132,7 +132,7 @@
                                 <a href="{{ route('blog.show', $featured->slug) }}" class="list-group-item list-group-item-action">
                                     <div class="d-flex">
                                         @if($featured->featured_image)
-                                            <img src="{{ asset($featured->featured_image) }}" alt="{{ $featured->title }}" 
+                                            <img src="{{ asset($featured->featured_image) }}" alt="{{ $featured->title }}"
                                                  class="mr-3" style="width: 60px; height: 60px; object-fit: cover;">
                                         @endif
                                         <div>

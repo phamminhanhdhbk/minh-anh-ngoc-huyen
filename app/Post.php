@@ -10,7 +10,7 @@ class Post extends Model
     use HasSeoData;
 
     protected $fillable = [
-        'blog_category_id', 'user_id', 'title', 'slug', 'excerpt', 'content', 
+        'blog_category_id', 'user_id', 'title', 'slug', 'excerpt', 'content',
         'featured_image', 'status', 'featured', 'views', 'published_at'
     ];
 

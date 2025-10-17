@@ -81,7 +81,7 @@ class PostController extends Controller
         $data = $request->all();
         $data['user_id'] = auth()->id();
         $data['slug'] = $request->slug ?: Str::slug($request->title);
-        
+
         if ($request->status == 'published' && !$request->published_at) {
             $data['published_at'] = now();
         }

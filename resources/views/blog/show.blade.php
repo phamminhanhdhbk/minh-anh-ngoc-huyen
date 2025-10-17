@@ -9,11 +9,11 @@
             <!-- Post Header -->
             <article class="blog-post">
                 <h1 class="mb-3">{{ $post->title }}</h1>
-                
+
                 <div class="text-muted mb-4">
-                    <i class="fas fa-user"></i> {{ $post->author->name ?? 'Admin' }} | 
-                    <i class="fas fa-calendar"></i> {{ $post->published_at->format('d/m/Y H:i') }} | 
-                    <i class="fas fa-eye"></i> {{ $post->views }} lượt xem | 
+                    <i class="fas fa-user"></i> {{ $post->author->name ?? 'Admin' }} |
+                    <i class="fas fa-calendar"></i> {{ $post->published_at->format('d/m/Y H:i') }} |
+                    <i class="fas fa-eye"></i> {{ $post->views }} lượt xem |
                     <i class="fas fa-folder"></i> <a href="{{ route('blog.index', ['category' => $post->category->slug]) }}">{{ $post->category->name }}</a>
                 </div>
 
@@ -90,7 +90,7 @@
                 <div class="card mb-4">
                     <div class="card-body">
                         <h5>Để lại bình luận</h5>
-                        
+
                         @if(session('success'))
                             <div class="alert alert-success">{{ session('success') }}</div>
                         @endif
@@ -99,7 +99,7 @@
                             @csrf
                             <div class="form-group">
                                 <label for="name">Tên <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control @error('name') is-invalid @enderror" 
+                                <input type="text" class="form-control @error('name') is-invalid @enderror"
                                        id="name" name="name" value="{{ old('name', auth()->user()->name ?? '') }}" required>
                                 @error('name')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -108,7 +108,7 @@
 
                             <div class="form-group">
                                 <label for="email">Email <span class="text-danger">*</span></label>
-                                <input type="email" class="form-control @error('email') is-invalid @enderror" 
+                                <input type="email" class="form-control @error('email') is-invalid @enderror"
                                        id="email" name="email" value="{{ old('email', auth()->user()->email ?? '') }}" required>
                                 @error('email')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -117,7 +117,7 @@
 
                             <div class="form-group">
                                 <label for="content">Nội dung <span class="text-danger">*</span></label>
-                                <textarea class="form-control @error('content') is-invalid @enderror" 
+                                <textarea class="form-control @error('content') is-invalid @enderror"
                                           id="content" name="content" rows="4" required>{{ old('content') }}</textarea>
                                 @error('content')
                                     <div class="invalid-feedback">{{ $message }}</div>
