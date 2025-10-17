@@ -46,6 +46,43 @@
             transform: translateX(5px);
         }
 
+        .dropdown-menu-custom {
+            background: rgba(255,255,255,0.05);
+            border-left: 3px solid rgba(255,255,255,0.3);
+            margin-left: 1rem;
+            padding: 0.5rem 0;
+            display: none;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-menu-custom.show {
+            display: block;
+        }
+
+        .dropdown-menu-custom .nav-link {
+            padding: 0.5rem 1.5rem 0.5rem 2.5rem;
+            font-size: 0.9rem;
+        }
+
+        .dropdown-toggle-custom {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .dropdown-toggle-custom::after {
+            content: '\f107';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 1.5rem;
+            transition: transform 0.3s;
+        }
+
+        .dropdown-toggle-custom.active::after {
+            transform: rotate(180deg);
+        }
+
         .main-content {
             margin-left: 250px;
             transition: all 0.3s;
@@ -158,39 +195,38 @@
                     </a>
                 </li>
 
-                <!-- Blog Management -->
-                <li class="nav-item mt-3">
-                    <span class="nav-link text-white opacity-75 fw-bold" style="cursor: default;">
-                        <i class="fas fa-blog me-2"></i>BLOG
-                    </span>
-                </li>
-
+                <!-- Blog Management Dropdown -->
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.blog-categories.*') ? 'active' : '' }}"
-                       href="{{ route('admin.blog-categories.index') }}">
-                        <i class="fas fa-folder-open me-2"></i>Danh mục Blog
+                    <a class="nav-link dropdown-toggle-custom {{ request()->routeIs('admin.blog-categories.*') || request()->routeIs('admin.posts.*') || request()->routeIs('admin.post-tags.*') || request()->routeIs('admin.post-comments.*') ? 'active' : '' }}"
+                       onclick="toggleBlogMenu(event)">
+                        <i class="fas fa-blog me-2"></i>Quản lý Blog
                     </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.posts.*') ? 'active' : '' }}"
-                       href="{{ route('admin.posts.index') }}">
-                        <i class="fas fa-file-alt me-2"></i>Bài viết
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.post-tags.*') ? 'active' : '' }}"
-                       href="{{ route('admin.post-tags.index') }}">
-                        <i class="fas fa-tags me-2"></i>Tags
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.post-comments.*') ? 'active' : '' }}"
-                       href="{{ route('admin.post-comments.index') }}">
-                        <i class="fas fa-comments me-2"></i>Bình luận
-                    </a>
+                    <ul class="nav flex-column dropdown-menu-custom {{ request()->routeIs('admin.blog-categories.*') || request()->routeIs('admin.posts.*') || request()->routeIs('admin.post-tags.*') || request()->routeIs('admin.post-comments.*') ? 'show' : '' }}" id="blogDropdown">
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.blog-categories.*') ? 'active' : '' }}"
+                               href="{{ route('admin.blog-categories.index') }}">
+                                <i class="fas fa-folder-open me-2"></i>Danh mục
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.posts.*') ? 'active' : '' }}"
+                               href="{{ route('admin.posts.index') }}">
+                                <i class="fas fa-file-alt me-2"></i>Bài viết
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.post-tags.*') ? 'active' : '' }}"
+                               href="{{ route('admin.post-tags.index') }}">
+                                <i class="fas fa-tags me-2"></i>Tags
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.post-comments.*') ? 'active' : '' }}"
+                               href="{{ route('admin.post-comments.index') }}">
+                                <i class="fas fa-comments me-2"></i>Bình luận
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li class="nav-item">
@@ -303,6 +339,16 @@
                 }
             });
         });
+
+        // Blog Dropdown Toggle
+        function toggleBlogMenu(event) {
+            event.preventDefault();
+            const dropdown = document.getElementById('blogDropdown');
+            const toggle = event.currentTarget;
+            
+            dropdown.classList.toggle('show');
+            toggle.classList.toggle('active');
+        }
 
         // Auto-dismiss alerts
         setTimeout(function() {
