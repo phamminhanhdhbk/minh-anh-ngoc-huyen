@@ -115,4 +115,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::patch('post-comments/{comment}/approve', 'Admin\PostCommentController@approve')->name('post-comments.approve');
     Route::patch('post-comments/{comment}/reject', 'Admin\PostCommentController@reject')->name('post-comments.reject');
     Route::delete('post-comments/{comment}', 'Admin\PostCommentController@destroy')->name('post-comments.destroy');
+
+    // Menu Management
+    Route::resource('menus', 'Admin\MenuController');
+    Route::post('menus/{menu}/items', 'Admin\MenuController@storeItem')->name('menus.items.store');
+    Route::put('menus/{menu}/items/{item}', 'Admin\MenuController@updateItem')->name('menus.items.update');
+    Route::delete('menus/{menu}/items/{item}', 'Admin\MenuController@destroyItem')->name('menus.items.destroy');
+    Route::post('menus/{menu}/update-order', 'Admin\MenuController@updateOrder')->name('menus.update-order');
 });

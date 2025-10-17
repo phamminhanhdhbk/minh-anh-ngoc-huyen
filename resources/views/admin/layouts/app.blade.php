@@ -230,6 +230,13 @@
                 </li>
 
                 <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.menus.*') ? 'active' : '' }}"
+                       href="{{ route('admin.menus.index') }}">
+                        <i class="fas fa-bars me-2"></i>Quản lý Menu
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}"
                        href="{{ route('admin.settings.index') }}">
                         <i class="fas fa-cog me-2"></i>Cấu hình Website
