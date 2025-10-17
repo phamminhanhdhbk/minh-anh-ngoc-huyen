@@ -158,6 +158,41 @@
                     </a>
                 </li>
 
+                <!-- Blog Management -->
+                <li class="nav-item mt-3">
+                    <span class="nav-link text-white opacity-75 fw-bold" style="cursor: default;">
+                        <i class="fas fa-blog me-2"></i>BLOG
+                    </span>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.blog-categories.*') ? 'active' : '' }}"
+                       href="{{ route('admin.blog-categories.index') }}">
+                        <i class="fas fa-folder-open me-2"></i>Danh mục Blog
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.posts.*') ? 'active' : '' }}"
+                       href="{{ route('admin.posts.index') }}">
+                        <i class="fas fa-file-alt me-2"></i>Bài viết
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.post-tags.*') ? 'active' : '' }}"
+                       href="{{ route('admin.post-tags.index') }}">
+                        <i class="fas fa-tags me-2"></i>Tags
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.post-comments.*') ? 'active' : '' }}"
+                       href="{{ route('admin.post-comments.index') }}">
+                        <i class="fas fa-comments me-2"></i>Bình luận
+                    </a>
+                </li>
+
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}"
                        href="{{ route('admin.settings.index') }}">

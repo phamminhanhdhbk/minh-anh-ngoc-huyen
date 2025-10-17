@@ -99,6 +99,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('products.index') }}">Sản phẩm</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('blog.index') }}">
+                            <i class="fas fa-blog me-1"></i>Blog
+                        </a>
+                    </li>
                 </ul>
 
                 <!-- Search Form -->
