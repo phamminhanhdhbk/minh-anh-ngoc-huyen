@@ -37,12 +37,12 @@
 
                         <div class="form-group">
                             <label for="name">Tên Menu <span class="text-danger">*</span></label>
-                            <input type="text" 
-                                   class="form-control @error('name') is-invalid @enderror" 
-                                   id="name" 
-                                   name="name" 
-                                   value="{{ old('name') }}" 
-                                   required 
+                            <input type="text"
+                                   class="form-control @error('name') is-invalid @enderror"
+                                   id="name"
+                                   name="name"
+                                   value="{{ old('name') }}"
+                                   required
                                    autofocus>
                             @error('name')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -51,11 +51,11 @@
 
                         <div class="form-group">
                             <label for="slug">Slug <span class="text-danger">*</span></label>
-                            <input type="text" 
-                                   class="form-control @error('slug') is-invalid @enderror" 
-                                   id="slug" 
-                                   name="slug" 
-                                   value="{{ old('slug') }}" 
+                            <input type="text"
+                                   class="form-control @error('slug') is-invalid @enderror"
+                                   id="slug"
+                                   name="slug"
+                                   value="{{ old('slug') }}"
                                    required>
                             <small class="form-text text-muted">Slug sẽ được tạo tự động nếu để trống</small>
                             @error('slug')
@@ -65,8 +65,8 @@
 
                         <div class="form-group">
                             <label for="location">Vị trí</label>
-                            <select class="form-control @error('location') is-invalid @enderror" 
-                                    id="location" 
+                            <select class="form-control @error('location') is-invalid @enderror"
+                                    id="location"
                                     name="location">
                                 <option value="">-- Chọn vị trí --</option>
                                 <option value="header" {{ old('location') == 'header' ? 'selected' : '' }}>Header (Đầu trang)</option>
@@ -81,9 +81,9 @@
 
                         <div class="form-group">
                             <label for="description">Mô tả</label>
-                            <textarea class="form-control @error('description') is-invalid @enderror" 
-                                      id="description" 
-                                      name="description" 
+                            <textarea class="form-control @error('description') is-invalid @enderror"
+                                      id="description"
+                                      name="description"
                                       rows="3">{{ old('description') }}</textarea>
                             @error('description')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -92,11 +92,11 @@
 
                         <div class="form-group">
                             <label for="order">Thứ tự</label>
-                            <input type="number" 
-                                   class="form-control @error('order') is-invalid @enderror" 
-                                   id="order" 
-                                   name="order" 
-                                   value="{{ old('order', 0) }}" 
+                            <input type="number"
+                                   class="form-control @error('order') is-invalid @enderror"
+                                   id="order"
+                                   name="order"
+                                   value="{{ old('order', 0) }}"
                                    min="0">
                             @error('order')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -106,11 +106,11 @@
                         <div class="form-group">
                             <div class="custom-control custom-checkbox">
                                 <input type="hidden" name="is_active" value="0">
-                                <input type="checkbox" 
-                                       class="custom-control-input" 
-                                       id="is_active" 
-                                       name="is_active" 
-                                       value="1" 
+                                <input type="checkbox"
+                                       class="custom-control-input"
+                                       id="is_active"
+                                       name="is_active"
+                                       value="1"
                                        {{ old('is_active', 1) ? 'checked' : '' }}>
                                 <label class="custom-control-label" for="is_active">
                                     Hiển thị menu
@@ -141,10 +141,10 @@
                 <div class="card-body">
                     <h6 class="font-weight-bold">Tạo Menu</h6>
                     <p class="small mb-3">Sau khi tạo menu, bạn có thể thêm các mục menu (menu items) vào menu này.</p>
-                    
+
                     <h6 class="font-weight-bold">Vị trí Menu</h6>
                     <p class="small mb-3">Chọn vị trí hiển thị menu trên website (header, footer, sidebar, mobile).</p>
-                    
+
                     <h6 class="font-weight-bold">Slug</h6>
                     <p class="small mb-0">Slug được dùng để gọi menu trong code. Nên sử dụng ký tự không dấu, không khoảng trắng.</p>
                 </div>

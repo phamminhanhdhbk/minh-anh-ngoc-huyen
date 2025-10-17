@@ -48,11 +48,11 @@
 
                         <div class="form-group">
                             <label for="name">Tên Menu <span class="text-danger">*</span></label>
-                            <input type="text" 
-                                   class="form-control @error('name') is-invalid @enderror" 
-                                   id="name" 
-                                   name="name" 
-                                   value="{{ old('name', $menu->name) }}" 
+                            <input type="text"
+                                   class="form-control @error('name') is-invalid @enderror"
+                                   id="name"
+                                   name="name"
+                                   value="{{ old('name', $menu->name) }}"
                                    required>
                             @error('name')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -61,11 +61,11 @@
 
                         <div class="form-group">
                             <label for="slug">Slug <span class="text-danger">*</span></label>
-                            <input type="text" 
-                                   class="form-control @error('slug') is-invalid @enderror" 
-                                   id="slug" 
-                                   name="slug" 
-                                   value="{{ old('slug', $menu->slug) }}" 
+                            <input type="text"
+                                   class="form-control @error('slug') is-invalid @enderror"
+                                   id="slug"
+                                   name="slug"
+                                   value="{{ old('slug', $menu->slug) }}"
                                    required>
                             @error('slug')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -74,8 +74,8 @@
 
                         <div class="form-group">
                             <label for="location">Vị trí</label>
-                            <select class="form-control @error('location') is-invalid @enderror" 
-                                    id="location" 
+                            <select class="form-control @error('location') is-invalid @enderror"
+                                    id="location"
                                     name="location">
                                 <option value="">-- Chọn vị trí --</option>
                                 <option value="header" {{ old('location', $menu->location) == 'header' ? 'selected' : '' }}>Header</option>
@@ -87,30 +87,30 @@
 
                         <div class="form-group">
                             <label for="description">Mô tả</label>
-                            <textarea class="form-control" 
-                                      id="description" 
-                                      name="description" 
+                            <textarea class="form-control"
+                                      id="description"
+                                      name="description"
                                       rows="3">{{ old('description', $menu->description) }}</textarea>
                         </div>
 
                         <div class="form-group">
                             <label for="order">Thứ tự</label>
-                            <input type="number" 
-                                   class="form-control" 
-                                   id="order" 
-                                   name="order" 
-                                   value="{{ old('order', $menu->order) }}" 
+                            <input type="number"
+                                   class="form-control"
+                                   id="order"
+                                   name="order"
+                                   value="{{ old('order', $menu->order) }}"
                                    min="0">
                         </div>
 
                         <div class="form-group">
                             <div class="custom-control custom-checkbox">
                                 <input type="hidden" name="is_active" value="0">
-                                <input type="checkbox" 
-                                       class="custom-control-input" 
-                                       id="is_active" 
-                                       name="is_active" 
-                                       value="1" 
+                                <input type="checkbox"
+                                       class="custom-control-input"
+                                       id="is_active"
+                                       name="is_active"
+                                       value="1"
                                        {{ old('is_active', $menu->is_active) ? 'checked' : '' }}>
                                 <label class="custom-control-label" for="is_active">
                                     Hiển thị menu
@@ -145,7 +145,7 @@
                                 <option value="">-- Không có (Menu gốc) --</option>
                                 @foreach($menu->allItems as $item)
                                     <option value="{{ $item->id }}">
-                                        {{ str_repeat('—', substr_count($item->parent_id ? $item->parent->title : '', '—')) }} 
+                                        {{ str_repeat('—', substr_count($item->parent_id ? $item->parent->title : '', '—')) }}
                                         {{ $item->title }}
                                     </option>
                                 @endforeach
@@ -192,11 +192,11 @@
                         <div class="form-group">
                             <div class="custom-control custom-checkbox">
                                 <input type="hidden" name="is_active" value="0">
-                                <input type="checkbox" 
-                                       class="custom-control-input" 
-                                       id="item_is_active" 
-                                       name="is_active" 
-                                       value="1" 
+                                <input type="checkbox"
+                                       class="custom-control-input"
+                                       id="item_is_active"
+                                       name="is_active"
+                                       value="1"
                                        checked>
                                 <label class="custom-control-label" for="item_is_active">
                                     Hiển thị
@@ -221,7 +221,7 @@
                 <div class="card-body">
                     @if($menu->allItems->count() > 0)
                         <div class="alert alert-info">
-                            <i class="fas fa-info-circle"></i> 
+                            <i class="fas fa-info-circle"></i>
                             <strong>Tip:</strong> Bạn có thể sắp xếp lại thứ tự menu bằng cách kéo thả hoặc chỉnh sửa số thứ tự.
                         </div>
 
@@ -324,10 +324,10 @@
                     <div class="form-group">
                         <div class="custom-control custom-checkbox">
                             <input type="hidden" name="is_active" value="0">
-                            <input type="checkbox" 
-                                   class="custom-control-input" 
-                                   id="edit_is_active" 
-                                   name="is_active" 
+                            <input type="checkbox"
+                                   class="custom-control-input"
+                                   id="edit_is_active"
+                                   name="is_active"
                                    value="1">
                             <label class="custom-control-label" for="edit_is_active">
                                 Hiển thị
@@ -361,9 +361,9 @@ function editMenuItem(itemId) {
             document.getElementById('edit_css_class').value = data.css_class || '';
             document.getElementById('edit_order').value = data.order;
             document.getElementById('edit_is_active').checked = data.is_active;
-            
+
             document.getElementById('editForm').action = `{{ route('admin.menus.edit', $menu->id) }}/items/${itemId}`;
-            
+
             $('#editModal').modal('show');
         });
 }

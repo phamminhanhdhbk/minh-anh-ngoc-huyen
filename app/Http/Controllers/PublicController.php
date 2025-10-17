@@ -5,11 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Product;
 use App\Category;
+use App\Theme;
 
 class PublicController extends Controller
 {
     public function index()
     {
+        // Get theme (preview mode or active theme)
+        $themeId = session('preview_theme_id');
+        $theme = $themeId ? Theme::find($themeId) : Theme::getActiveTheme();
+
         // Get featured products
         $featuredProducts = Product::with(['category', 'primaryImage'])
             ->where('status', true)
@@ -43,6 +48,9 @@ class PublicController extends Controller
             ->limit(6)
             ->get();
 
-        return view('welcome', compact('featuredProducts', 'latestProducts', 'categories', 'bestSellers'));
+        // Determine which view to render
+        $view = $theme && $theme->view_path ? $theme->view_path : 'welcome';
+
+        return view($view, compact('featuredProducts', 'latestProducts', 'categories', 'bestSellers', 'theme'));
     }
 }

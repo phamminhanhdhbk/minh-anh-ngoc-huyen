@@ -122,4 +122,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::put('menus/{menu}/items/{item}', 'Admin\MenuController@updateItem')->name('menus.items.update');
     Route::delete('menus/{menu}/items/{item}', 'Admin\MenuController@destroyItem')->name('menus.items.destroy');
     Route::post('menus/{menu}/update-order', 'Admin\MenuController@updateOrder')->name('menus.update-order');
+
+    // Theme Management
+    Route::resource('themes', 'Admin\ThemeController');
+    Route::post('themes/{theme}/activate', 'Admin\ThemeController@activate')->name('themes.activate');
+    Route::get('themes/{theme}/preview', 'Admin\ThemeController@preview')->name('themes.preview');
+    Route::get('themes/clear-preview', 'Admin\ThemeController@clearPreview')->name('themes.clearPreview');
+    Route::post('themes/{theme}/settings', 'Admin\ThemeController@updateSettings')->name('themes.updateSettings');
 });

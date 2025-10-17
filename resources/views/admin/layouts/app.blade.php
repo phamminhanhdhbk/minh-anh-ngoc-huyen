@@ -237,6 +237,13 @@
                 </li>
 
                 <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.themes.*') ? 'active' : '' }}"
+                       href="{{ route('admin.themes.index') }}">
+                        <i class="fas fa-paint-brush me-2"></i>Quản lý Theme
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}"
                        href="{{ route('admin.settings.index') }}">
                         <i class="fas fa-cog me-2"></i>Cấu hình Website
@@ -352,7 +359,7 @@
             event.preventDefault();
             const dropdown = document.getElementById('blogDropdown');
             const toggle = event.currentTarget;
-            
+
             dropdown.classList.toggle('show');
             toggle.classList.toggle('active');
         }

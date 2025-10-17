@@ -80,7 +80,7 @@ class MenuController extends Controller
         $menu = Menu::with(['allItems' => function($query) {
             $query->orderBy('order');
         }])->findOrFail($id);
-        
+
         return view('admin.menus.edit', compact('menu'));
     }
 
@@ -193,7 +193,7 @@ class MenuController extends Controller
     public function updateOrder(Request $request, $menuId)
     {
         $items = $request->input('items', []);
-        
+
         foreach ($items as $index => $itemData) {
             MenuItem::where('id', $itemData['id'])
                 ->where('menu_id', $menuId)

@@ -70,13 +70,13 @@
                                 </td>
                                 <td>
                                     <div class="btn-group btn-group-sm" role="group">
-                                        <a href="{{ route('admin.menus.edit', $menu->id) }}" 
-                                           class="btn btn-info" 
+                                        <a href="{{ route('admin.menus.edit', $menu->id) }}"
+                                           class="btn btn-info"
                                            title="Chỉnh sửa & Quản lý mục">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('admin.menus.destroy', $menu->id) }}" 
-                                              method="POST" 
+                                        <form action="{{ route('admin.menus.destroy', $menu->id) }}"
+                                              method="POST"
                                               class="d-inline"
                                               onsubmit="return confirm('Bạn có chắc chắn muốn xóa menu này? Tất cả mục menu con cũng sẽ bị xóa.');">
                                             @csrf

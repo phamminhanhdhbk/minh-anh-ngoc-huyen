@@ -40,14 +40,14 @@
     </td>
     <td>
         <div class="btn-group btn-group-sm" role="group">
-            <button type="button" 
-                    class="btn btn-info" 
+            <button type="button"
+                    class="btn btn-info"
                     onclick="editMenuItem({{ $item->id }})"
                     title="Chỉnh sửa">
                 <i class="fas fa-edit"></i>
             </button>
-            <form action="{{ route('admin.menus.items.destroy', [$menu->id, $item->id]) }}" 
-                  method="POST" 
+            <form action="{{ route('admin.menus.items.destroy', [$menu->id, $item->id]) }}"
+                  method="POST"
                   class="d-inline"
                   onsubmit="return confirm('Bạn có chắc chắn muốn xóa mục menu này?');">
                 @csrf

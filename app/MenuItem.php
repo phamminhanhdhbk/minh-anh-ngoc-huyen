@@ -55,11 +55,11 @@ class MenuItem extends Model
         if ($value) {
             return $value;
         }
-        
+
         if ($this->route) {
             return route($this->route);
         }
-        
+
         return '#';
     }
 }
