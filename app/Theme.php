@@ -31,7 +31,7 @@ class Theme extends Model
      */
     public static function getActiveTheme()
     {
-        return self::where('is_active', true)->first() 
+        return self::where('is_active', true)->first()
             ?? self::where('is_default', true)->first()
             ?? self::first();
     }
@@ -43,7 +43,7 @@ class Theme extends Model
     {
         // Deactivate all other themes
         self::where('id', '!=', $this->id)->update(['is_active' => false]);
-        
+
         // Activate this theme
         $this->update(['is_active' => true]);
     }

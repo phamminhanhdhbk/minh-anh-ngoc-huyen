@@ -23,7 +23,7 @@
                         <i class="fas fa-star me-2"></i>Sản phẩm nổi bật
                     </a>
                 </div>
-                
+
                 @if(setting('free_shipping_amount'))
                 <div class="mt-4">
                     <div class="alert alert-warning d-inline-flex align-items-center shadow">

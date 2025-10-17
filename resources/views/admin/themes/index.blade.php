@@ -43,8 +43,8 @@
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="card shadow h-100 {{ $theme->is_active ? 'border-success' : '' }}">
                     @if($theme->thumbnail)
-                        <img src="{{ asset($theme->thumbnail) }}" 
-                             class="card-img-top" 
+                        <img src="{{ asset($theme->thumbnail) }}"
+                             class="card-img-top"
                              alt="{{ $theme->name }}"
                              style="height: 200px; object-fit: cover;">
                     @else
@@ -53,7 +53,7 @@
                             <i class="fas fa-image fa-4x text-white"></i>
                         </div>
                     @endif
-                    
+
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start mb-2">
                             <h5 class="card-title mb-0">{{ $theme->name }}</h5>
@@ -63,11 +63,11 @@
                                 <span class="badge badge-info">Mặc định</span>
                             @endif
                         </div>
-                        
+
                         <p class="card-text text-muted small">
                             {{ $theme->description ?: 'Không có mô tả' }}
                         </p>
-                        
+
                         <div class="mb-3">
                             <small class="text-muted">
                                 <i class="fas fa-user"></i> {{ $theme->author ?: 'N/A' }}
@@ -80,38 +80,38 @@
                             <small class="text-muted"><i class="fas fa-folder"></i> {{ $theme->view_path }}</small>
                         </div>
                     </div>
-                    
+
                     <div class="card-footer bg-white">
                         <div class="btn-group btn-group-sm w-100" role="group">
                             @if(!$theme->is_active)
-                                <form action="{{ route('admin.themes.activate', $theme->id) }}" 
-                                      method="POST" 
+                                <form action="{{ route('admin.themes.activate', $theme->id) }}"
+                                      method="POST"
                                       class="flex-fill">
                                     @csrf
-                                    <button type="submit" 
+                                    <button type="submit"
                                             class="btn btn-success w-100"
                                             onclick="return confirm('Bạn có chắc muốn kích hoạt theme này?')">
                                         <i class="fas fa-check"></i> Kích hoạt
                                     </button>
                                 </form>
                             @endif
-                            
-                            <a href="{{ route('admin.themes.preview', $theme->id) }}" 
-                               class="btn btn-info" 
+
+                            <a href="{{ route('admin.themes.preview', $theme->id) }}"
+                               class="btn btn-info"
                                target="_blank"
                                title="Xem trước">
                                 <i class="fas fa-eye"></i>
                             </a>
-                            
-                            <a href="{{ route('admin.themes.edit', $theme->id) }}" 
-                               class="btn btn-primary" 
+
+                            <a href="{{ route('admin.themes.edit', $theme->id) }}"
+                               class="btn btn-primary"
                                title="Chỉnh sửa">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            
+
                             @if(!$theme->is_active && !$theme->is_default)
-                                <form action="{{ route('admin.themes.destroy', $theme->id) }}" 
-                                      method="POST" 
+                                <form action="{{ route('admin.themes.destroy', $theme->id) }}"
+                                      method="POST"
                                       onsubmit="return confirm('Bạn có chắc muốn xóa theme này?');">
                                     @csrf
                                     @method('DELETE')

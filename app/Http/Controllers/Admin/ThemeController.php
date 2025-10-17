@@ -19,7 +19,7 @@ class ThemeController extends Controller
     {
         $themes = Theme::orderBy('order')->get();
         $activeTheme = Theme::getActiveTheme();
-        
+
         return view('admin.themes.index', compact('themes', 'activeTheme'));
     }
 
@@ -188,7 +188,7 @@ class ThemeController extends Controller
     public function preview($id)
     {
         $theme = Theme::findOrFail($id);
-        
+
         // Store theme preview in session
         session(['preview_theme_id' => $theme->id]);
 
