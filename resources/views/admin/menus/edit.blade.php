@@ -14,9 +14,7 @@
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
 
@@ -28,9 +26,7 @@
                     <li>{{ $error }}</li>
                 @endforeach
             </ul>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
 
@@ -259,14 +255,12 @@
 </div>
 
 <!-- Edit Modal -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Chỉnh sửa Mục Menu</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title" id="editModalLabel">Chỉnh sửa Mục Menu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="editForm" method="POST">
                 @csrf
@@ -337,7 +331,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
                     <button type="submit" class="btn btn-primary">Cập nhật</button>
                 </div>
             </form>
@@ -461,9 +455,7 @@ function showAlert(type, message) {
     alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
     alertDiv.innerHTML = `
         ${message}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     `;
 
     const container = document.querySelector('.container-fluid');
@@ -494,7 +486,13 @@ function editMenuItem(itemId) {
             const updateUrl = '{{ route("admin.menus.items.update", [$menu->id, ":itemId"]) }}';
             document.getElementById('editForm').action = updateUrl.replace(':itemId', itemId);
 
-            $('#editModal').modal('show');
+            // Show modal using Bootstrap 5 syntax
+            const editModal = new bootstrap.Modal(document.getElementById('editModal'));
+            editModal.show();
+        })
+        .catch(error => {
+            console.error('Error fetching menu item:', error);
+            showAlert('danger', 'Không thể tải dữ liệu menu item!');
         });
 }
 </script>
