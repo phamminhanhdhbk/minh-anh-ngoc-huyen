@@ -373,7 +373,7 @@
 // Initialize drag and drop
 document.addEventListener('DOMContentLoaded', function() {
     const sortableElement = document.getElementById('sortable-menu-items');
-    
+
     if (sortableElement) {
         const sortable = new Sortable(sortableElement, {
             animation: 150,
@@ -440,10 +440,10 @@ function showAlert(type, message) {
             <span aria-hidden="true">&times;</span>
         </button>
     `;
-    
+
     const container = document.querySelector('.container-fluid');
     container.insertBefore(alertDiv, container.firstChild);
-    
+
     setTimeout(() => {
         alertDiv.remove();
     }, 3000);

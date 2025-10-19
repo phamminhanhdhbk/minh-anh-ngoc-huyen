@@ -113,19 +113,85 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('home') }}">Trang chủ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('products.index') }}">Sản phẩm</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('blog.index') }}">
-                            <i class="fas fa-blog me-1"></i>Blog
-                        </a>
-                    </li>
-                </ul>
+                <!-- Dynamic Menu from Database -->
+                @php
+                    $headerMenu = \App\Menu::where('location', 'header')
+                        ->where('is_active', true)
+                        ->with(['items' => function($query) {
+                            $query->whereNull('parent_id')
+                                ->where('is_active', true)
+                                ->orderBy('order');
+                        }, 'items.children' => function($query) {
+                            $query->where('is_active', true)
+                                ->orderBy('order');
+                        }])
+                        ->first();
+                @endphp
+
+                @if($headerMenu && $headerMenu->items->count() > 0)
+                    <ul class="navbar-nav me-auto">
+                        @foreach($headerMenu->items as $item)
+                            @php
+                                $hasChildren = $item->children->where('is_active', true)->count() > 0;
+                                $itemUrl = $item->url ?: ($item->route ? route($item->route) : '#');
+                                $isActive = request()->url() === $itemUrl || ($item->route && request()->routeIs($item->route));
+                            @endphp
+
+                            <li class="nav-item{{ $hasChildren ? ' dropdown' : '' }}{{ $item->css_class ? ' ' . $item->css_class : '' }}">
+                                @if($hasChildren)
+                                    <a class="nav-link dropdown-toggle{{ $isActive ? ' active' : '' }}" 
+                                       href="{{ $itemUrl }}" 
+                                       id="navbarDropdown{{ $item->id }}" 
+                                       role="button" 
+                                       data-bs-toggle="dropdown" 
+                                       aria-haspopup="true"
+                                       aria-expanded="false">
+                                        @if($item->icon)<i class="{{ $item->icon }} me-1"></i>@endif
+                                        {{ $item->title }}
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown{{ $item->id }}">
+                                        @foreach($item->children->where('is_active', true)->sortBy('order') as $child)
+                                            @php
+                                                $childUrl = $child->url ?: ($child->route ? route($child->route) : '#');
+                                                $childIsActive = request()->url() === $childUrl || ($child->route && request()->routeIs($child->route));
+                                            @endphp
+                                            <li>
+                                                <a class="dropdown-item{{ $childIsActive ? ' active' : '' }}" 
+                                                   href="{{ $childUrl }}" 
+                                                   target="{{ $child->target }}">
+                                                    @if($child->icon)<i class="{{ $child->icon }} me-1"></i>@endif
+                                                    {{ $child->title }}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @else
+                                    <a class="nav-link{{ $isActive ? ' active' : '' }}" 
+                                       href="{{ $itemUrl }}" 
+                                       target="{{ $item->target }}">
+                                        @if($item->icon)<i class="{{ $item->icon }} me-1"></i>@endif
+                                        {{ $item->title }}
+                                    </a>
+                                @endif
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    <!-- Fallback menu if no database menu -->
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('home') }}">Trang chủ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('products.index') }}">Sản phẩm</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('blog.index') }}">
+                                <i class="fas fa-blog me-1"></i>Blog
+                            </a>
+                        </li>
+                    </ul>
+                @endif
 
                 <!-- Search Form -->
                 @if(!Request::is('login') && !Request::is('register'))

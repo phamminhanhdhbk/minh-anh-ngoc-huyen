@@ -17,14 +17,24 @@ if (!function_exists('renderMenu')) {
             $menu = \App\Menu::where('slug', $identifier)
                 ->where('is_active', true)
                 ->with(['items' => function($query) {
-                    $query->where('is_active', true)->orderBy('order');
+                    $query->whereNull('parent_id')
+                        ->where('is_active', true)
+                        ->orderBy('order');
+                }, 'items.children' => function($query) {
+                    $query->where('is_active', true)
+                        ->orderBy('order');
                 }])
                 ->first();
         } else {
             $menu = \App\Menu::where('location', $identifier)
                 ->where('is_active', true)
                 ->with(['items' => function($query) {
-                    $query->where('is_active', true)->orderBy('order');
+                    $query->whereNull('parent_id')
+                        ->where('is_active', true)
+                        ->orderBy('order');
+                }, 'items.children' => function($query) {
+                    $query->where('is_active', true)
+                        ->orderBy('order');
                 }])
                 ->first();
         }
