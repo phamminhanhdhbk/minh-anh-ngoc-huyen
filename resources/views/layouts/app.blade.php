@@ -97,6 +97,9 @@
 </head>
 <body>
     <!-- Navigation -->
+    @hasSection('navbar')
+        @yield('navbar')
+    @else
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="{{ route('home') }}">
@@ -139,11 +142,11 @@
 
                             <li class="nav-item{{ $hasChildren ? ' dropdown' : '' }}{{ $item->css_class ? ' ' . $item->css_class : '' }}">
                                 @if($hasChildren)
-                                    <a class="nav-link dropdown-toggle{{ $isActive ? ' active' : '' }}" 
-                                       href="{{ $itemUrl }}" 
-                                       id="navbarDropdown{{ $item->id }}" 
-                                       role="button" 
-                                       data-bs-toggle="dropdown" 
+                                    <a class="nav-link dropdown-toggle{{ $isActive ? ' active' : '' }}"
+                                       href="{{ $itemUrl }}"
+                                       id="navbarDropdown{{ $item->id }}"
+                                       role="button"
+                                       data-bs-toggle="dropdown"
                                        aria-haspopup="true"
                                        aria-expanded="false">
                                         @if($item->icon)<i class="{{ $item->icon }} me-1"></i>@endif
@@ -156,8 +159,8 @@
                                                 $childIsActive = request()->url() === $childUrl || ($child->route && request()->routeIs($child->route));
                                             @endphp
                                             <li>
-                                                <a class="dropdown-item{{ $childIsActive ? ' active' : '' }}" 
-                                                   href="{{ $childUrl }}" 
+                                                <a class="dropdown-item{{ $childIsActive ? ' active' : '' }}"
+                                                   href="{{ $childUrl }}"
                                                    target="{{ $child->target }}">
                                                     @if($child->icon)<i class="{{ $child->icon }} me-1"></i>@endif
                                                     {{ $child->title }}
@@ -166,8 +169,8 @@
                                         @endforeach
                                     </ul>
                                 @else
-                                    <a class="nav-link{{ $isActive ? ' active' : '' }}" 
-                                       href="{{ $itemUrl }}" 
+                                    <a class="nav-link{{ $isActive ? ' active' : '' }}"
+                                       href="{{ $itemUrl }}"
                                        target="{{ $item->target }}">
                                         @if($item->icon)<i class="{{ $item->icon }} me-1"></i>@endif
                                         {{ $item->title }}
@@ -258,6 +261,7 @@
             </div>
         </div>
     </nav>
+    @endif
 
     <!-- Alert Messages -->
     @if(session('success'))
@@ -281,6 +285,9 @@
 
     <!-- Footer -->
     @if(!Request::is('login') && !Request::is('register'))
+    @hasSection('footer')
+        @yield('footer')
+    @else
     <footer class="footer mt-5">
         <div class="container">
             <div class="row">
@@ -334,6 +341,7 @@
             </div>
         </div>
     </footer>
+    @endif
     @endif
 
     <!-- jQuery (load first) -->

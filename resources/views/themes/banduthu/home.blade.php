@@ -2,9 +2,132 @@
 
 @section('title', setting("site_name", "BanDuThu.com") . ' - Trang chủ')
 
+@section('navbar')
+<!-- Banduthu Custom Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark" style="background: #e63946;">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="{{ route('home') }}">
+            @if(setting('site_logo'))
+                <img src="{{ setting('site_logo') }}" alt="{{ setting('site_name', 'BanDuThu.com') }}" style="height: 40px;" class="me-2">
+            @else
+                <i class="fas fa-store me-2"></i>
+            @endif
+            {{ setting('site_name', 'BanDuThu.com') }}
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <!-- Dynamic Menu -->
+            @php
+                $headerMenu = \App\Menu::where('location', 'header')
+                    ->where('is_active', true)
+                    ->with(['items' => function($query) {
+                        $query->whereNull('parent_id')->where('is_active', true)->orderBy('order');
+                    }, 'items.children' => function($query) {
+                        $query->where('is_active', true)->orderBy('order');
+                    }])
+                    ->first();
+            @endphp
+
+            @if($headerMenu && $headerMenu->items->count() > 0)
+                <ul class="navbar-nav me-auto">
+                    @foreach($headerMenu->items as $item)
+                        @php
+                            $hasChildren = $item->children->where('is_active', true)->count() > 0;
+                            $itemUrl = $item->url ?: ($item->route ? route($item->route) : '#');
+                            $isActive = request()->url() === $itemUrl || ($item->route && request()->routeIs($item->route));
+                        @endphp
+                        <li class="nav-item{{ $hasChildren ? ' dropdown' : '' }}">
+                            @if($hasChildren)
+                                <a class="nav-link dropdown-toggle{{ $isActive ? ' active' : '' }}" 
+                                   href="{{ $itemUrl }}" 
+                                   role="button" 
+                                   data-bs-toggle="dropdown">
+                                    @if($item->icon)<i class="{{ $item->icon }} me-1"></i>@endif
+                                    {{ $item->title }}
+                                </a>
+                                <ul class="dropdown-menu">
+                                    @foreach($item->children->where('is_active', true)->sortBy('order') as $child)
+                                        <li>
+                                            <a class="dropdown-item" 
+                                               href="{{ $child->url ?: ($child->route ? route($child->route) : '#') }}">
+                                                @if($child->icon)<i class="{{ $child->icon }} me-1"></i>@endif
+                                                {{ $child->title }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <a class="nav-link{{ $isActive ? ' active' : '' }}" href="{{ $itemUrl }}">
+                                    @if($item->icon)<i class="{{ $item->icon }} me-1"></i>@endif
+                                    {{ $item->title }}
+                                </a>
+                            @endif
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
+
+            <!-- Search -->
+            <form class="d-flex me-3" method="GET" action="{{ route('products.index') }}">
+                <input class="form-control me-2" type="search" name="search" placeholder="Tìm kiếm..." style="min-width: 200px;">
+                <button class="btn btn-warning" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+
+            <!-- Right Side -->
+            <ul class="navbar-nav">
+                @guest
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('login') }}">
+                            <i class="fas fa-sign-in-alt me-1"></i>Đăng nhập
+                        </a>
+                    </li>
+                @else
+                    <li class="nav-item me-2">
+                        <a href="{{ route('cart.index') }}" class="btn btn-warning position-relative">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-count">
+                                0
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user me-1"></i>{{ Auth::user()->name }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            @if(Auth::user()->is_admin)
+                                <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">
+                                    <i class="fas fa-tachometer-alt me-2"></i>Quản trị
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                            @endif
+                            <li>
+                                <a class="dropdown-item" href="{{ route('logout') }}"
+                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
+                                </a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                @endguest
+            </ul>
+        </div>
+    </div>
+</nav>
+@endsection
+
 @section('content')
 <!-- Top Header Bar -->
-<div class="top-header-bar bg-danger text-white py-2">
+<div class="top-header-bar text-white py-2" style="background: #e63946;">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-md-6">
@@ -29,7 +152,7 @@
         <div class="col-lg-3 col-md-4">
             <!-- Categories Menu -->
             <div class="categories-sidebar shadow-sm mb-4">
-                <div class="categories-header bg-danger text-white p-3">
+                <div class="categories-header text-white p-3" style="background: #e63946;">
                     <h5 class="mb-0">
                         <i class="fas fa-bars me-2"></i>DANH MUC SẢN PHẨM
                     </h5>
@@ -178,7 +301,7 @@
             <!-- Small Banners -->
             <div class="row mb-4">
                 <div class="col-md-4 mb-3">
-                    <div class="promo-banner bg-danger text-white rounded shadow-sm p-3 text-center">
+                    <div class="promo-banner text-white rounded shadow-sm p-3 text-center" style="background: #e63946;">
                         <h6 class="mb-1">TẶNG BÓNG DB/K3</h6>
                         <small>Mở hộp may mắn</small>
                     </div>
@@ -339,6 +462,29 @@
 
 @push('styles')
 <style>
+/* Banduthu Theme Colors - Override Bootstrap danger */
+.text-danger {
+    color: #e63946 !important;
+}
+
+.bg-danger {
+    background-color: #e63946 !important;
+}
+
+.btn-danger {
+    background-color: #e63946 !important;
+    border-color: #e63946 !important;
+}
+
+.btn-danger:hover {
+    background-color: #d62839 !important;
+    border-color: #d62839 !important;
+}
+
+.badge.bg-danger {
+    background-color: #e63946 !important;
+}
+
 /* Top Header Bar */
 .top-header-bar {
     font-size: 0.85rem;
@@ -411,7 +557,7 @@
     position: absolute;
     top: 10px;
     left: 10px;
-    background: #dc3545;
+    background: #e63946;
     color: white;
     padding: 5px 10px;
     border-radius: 20px;
@@ -445,7 +591,7 @@
 }
 
 .product-title a:hover {
-    color: #dc3545 !important;
+    color: #e63946 !important;
 }
 
 .product-rating i {
@@ -509,4 +655,61 @@
 }
 </style>
 @endpush
+@endsection
+
+@section('footer')
+<!-- Banduthu Custom Footer -->
+<footer class="mt-5 text-white" style="background: #e63946;">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-4">
+                <h5 class="fw-bold">
+                    @if(setting('site_logo'))
+                        <img src="{{ setting('site_logo') }}" alt="{{ setting('site_name', 'BanDuThu.com') }}" style="height: 30px;" class="me-2">
+                    @else
+                        <i class="fas fa-store me-2"></i>
+                    @endif
+                    {{ setting('site_name', 'BanDuThu.com') }}
+                </h5>
+                <p class="mt-3">{{ setting('site_description', 'Mua sắm trực tuyến số 1 Việt Nam') }}</p>
+                <p><strong>Giờ làm việc:</strong><br>{{ setting('business_hours', 'Thứ 2 - Chủ nhật: 8:00 - 22:00') }}</p>
+            </div>
+            <div class="col-md-4">
+                <h5 class="fw-bold">Liên hệ</h5>
+                <p class="mt-3"><i class="fas fa-phone me-2"></i>{{ setting('contact_phone', '1900-000-000') }}</p>
+                <p><i class="fas fa-envelope me-2"></i>{{ setting('contact_email', 'support@banduthu.com') }}</p>
+                <p><i class="fas fa-map-marker-alt me-2"></i>{{ setting('contact_address', 'Hệ thống cửa hàng toàn quốc') }}</p>
+            </div>
+            <div class="col-md-4">
+                <h5 class="fw-bold">Theo dõi chúng tôi</h5>
+                <div class="d-flex gap-3 mt-3">
+                    @if(setting('social_facebook'))
+                    <a href="{{ setting('social_facebook') }}" class="text-white" target="_blank">
+                        <i class="fab fa-facebook fa-2x"></i>
+                    </a>
+                    @endif
+                    @if(setting('social_instagram'))
+                    <a href="{{ setting('social_instagram') }}" class="text-white" target="_blank">
+                        <i class="fab fa-instagram fa-2x"></i>
+                    </a>
+                    @endif
+                    @if(setting('social_youtube'))
+                    <a href="{{ setting('social_youtube') }}" class="text-white" target="_blank">
+                        <i class="fab fa-youtube fa-2x"></i>
+                    </a>
+                    @endif
+                </div>
+                @if(setting('free_shipping_amount'))
+                <div class="mt-3 p-3 rounded" style="background: rgba(255,255,255,0.1);">
+                    <p class="mb-0"><i class="fas fa-shipping-fast me-2"></i>Miễn phí vận chuyển cho đơn hàng từ {{ number_format(setting('free_shipping_amount')) }}₫</p>
+                </div>
+                @endif
+            </div>
+        </div>
+        <hr class="mt-4 mb-3" style="border-color: rgba(255,255,255,0.2);">
+        <div class="text-center">
+            <p class="mb-0">&copy; 2025 {{ setting('site_name', 'BanDuThu.com') }}. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
 @endsection
