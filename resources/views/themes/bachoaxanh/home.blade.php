@@ -182,6 +182,16 @@
             <!-- Main Content -->
             <div class="col-lg-10 col-md-9">
                 <!-- Flash Sale Banner -->
+                <!-- Flash Sale Banner - Top Categories -->
+                @php
+                    $flashCategories = App\Category::withCount('products')
+                        ->having('products_count', '>', 0)
+                        ->orderBy('products_count', 'desc')
+                        ->take(8)
+                        ->get();
+                @endphp
+                
+                @if($flashCategories->count() > 0)
                 <div class="flash-sale-banner mt-3 mb-3">
                     <div class="row g-2">
                         <div class="col-md-2">
@@ -192,36 +202,56 @@
                                 </div>
                             </div>
                         </div>
-                        @foreach(['Giá sốc cuối tuần', 'Nước giải khát', 'Gạo, nếp', 'Mì ăn liền', 'Nước suối', 'Sữa chua', 'Rau lá', 'Nước trà'] as $index => $item)
+                        @foreach($flashCategories as $index => $category)
                         <div class="col">
-                            <div class="quick-cat-item bg-white rounded text-center p-2 border h-100">
-                                @if($index == 0)
-                                    <div class="badge bg-danger text-white mb-1">-33%</div>
-                                @elseif($index == 1)
-                                    <div class="badge bg-success text-white mb-1">-27%</div>
-                                @endif
-                                <div class="cat-icon mb-1">
-                                    <img src="https://via.placeholder.com/50" class="img-fluid" alt="{{ $item }}">
+                            <a href="{{ route('categories.show', $category->slug) }}" class="text-decoration-none">
+                                <div class="quick-cat-item bg-white rounded text-center p-2 border h-100">
+                                    @if($index == 0)
+                                        <div class="badge bg-danger text-white mb-1">HOT</div>
+                                    @elseif($index == 1)
+                                        <div class="badge bg-success text-white mb-1">NEW</div>
+                                    @endif
+                                    <div class="cat-icon mb-1">
+                                        @if($category->icon)
+                                            <i class="{{ $category->icon }} fa-2x text-success"></i>
+                                        @else
+                                            <i class="fas fa-box fa-2x text-success"></i>
+                                        @endif
+                                    </div>
+                                    <small class="d-block text-truncate text-dark">{{ $category->name }}</small>
+                                    <small class="text-muted" style="font-size: 0.7rem;">{{ $category->products_count }} SP</small>
                                 </div>
-                                <small class="d-block text-truncate">{{ $item }}</small>
-                            </div>
+                            </a>
                         </div>
                         @endforeach
                     </div>
                 </div>
+                @endif
 
-                <!-- Category Pills -->
+                <!-- Category Pills - All Categories -->
+                @php
+                    $allCategories = App\Category::withCount('products')
+                        ->having('products_count', '>', 0)
+                        ->orderBy('name')
+                        ->get();
+                @endphp
+                
+                @if($allCategories->count() > 0)
                 <div class="category-pills mb-3">
                     <div class="d-flex gap-2 flex-wrap">
-                        <span class="badge bg-success text-white px-3 py-2">Món mặn</span>
-                        <span class="badge bg-light text-dark px-3 py-2">Món xào, lược</span>
-                        <span class="badge bg-light text-dark px-3 py-2">Món canh</span>
-                        <span class="badge bg-light text-dark px-3 py-2">Rau sống, nếm</span>
-                        <span class="badge bg-light text-dark px-3 py-2">Trái cây</span>
-                        <span class="badge bg-light text-dark px-3 py-2">Đồ ăn nhanh</span>
-                        <span class="badge bg-light text-dark px-3 py-2">Tráng miệng</span>
+                        @foreach($allCategories as $index => $category)
+                        <a href="{{ route('categories.show', $category->slug) }}" class="text-decoration-none">
+                            <span class="badge {{ $index == 0 ? 'bg-success text-white' : 'bg-light text-dark' }} px-3 py-2">
+                                @if($category->icon)
+                                    <i class="{{ $category->icon }} me-1"></i>
+                                @endif
+                                {{ $category->name }}
+                            </span>
+                        </a>
+                        @endforeach
                     </div>
                 </div>
+                @endif
 
                 <!-- Featured Section -->
                 <div class="featured-section-bhx mb-4">
@@ -252,7 +282,7 @@
                                                      class="img-fluid"
                                                      alt="{{ $product->name }}">
                                             @else
-                                                <img src="https://via.placeholder.com/150"
+                                                <img src="{{ asset('images/no-image.png') }}"
                                                      class="img-fluid"
                                                      alt="{{ $product->name }}">
                                             @endif
@@ -321,7 +351,7 @@
                                                  class="img-fluid"
                                                  alt="{{ $product->name }}">
                                         @else
-                                            <img src="https://via.placeholder.com/150"
+                                            <img src="{{ asset('images/no-image.png') }}"
                                                  class="img-fluid"
                                                  alt="{{ $product->name }}">
                                         @endif
@@ -373,7 +403,7 @@
                                                  class="img-fluid"
                                                  alt="{{ $product->name }}">
                                         @else
-                                            <img src="https://via.placeholder.com/150"
+                                            <img src="{{ asset('images/no-image.png') }}"
                                                  class="img-fluid"
                                                  alt="{{ $product->name }}">
                                         @endif
