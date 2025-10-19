@@ -132,13 +132,15 @@
         <div class="row align-items-center">
             <div class="col-md-6">
                 <small>
-                    <i class="fas fa-map-marker-alt me-2"></i>Chọn vị trí giao gần bạn
+                    <i class="fas fa-shipping-fast me-2"></i>Giao hàng nhanh 2h Hà Nội - Giao nhanh toàn quốc
                 </small>
             </div>
             <div class="col-md-6 text-end">
-                <a href="#" class="text-white text-decoration-none me-3">
-                    <i class="fas fa-user me-1"></i>Đăng nhập
-                </a>
+                <small>
+                    <i class="fas fa-phone me-2"></i>Tư vấn: {{ setting('contact_phone', '1900-000-000') }}
+                    <span class="mx-2">|</span>
+                    <i class="fas fa-map-marker-alt me-2"></i>Hệ thống cửa hàng
+                </small>
             </div>
         </div>
     </div>
