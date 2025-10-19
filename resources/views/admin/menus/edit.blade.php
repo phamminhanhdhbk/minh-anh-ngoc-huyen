@@ -229,17 +229,18 @@
                             <table class="table table-bordered table-hover">
                                 <thead class="thead-light">
                                     <tr>
+                                        <th width="3%"><i class="fas fa-grip-vertical text-muted"></i></th>
                                         <th width="5%">ID</th>
-                                        <th width="25%">Tiêu đề</th>
-                                        <th width="20%">URL/Route</th>
+                                        <th width="22%">Tiêu đề</th>
+                                        <th width="18%">URL/Route</th>
                                         <th width="10%">Icon</th>
-                                        <th width="10%">Thứ tự</th>
+                                        <th width="8%">Thứ tự</th>
                                         <th width="10%">Trạng thái</th>
-                                        <th width="20%">Hành động</th>
+                                        <th width="19%">Hành động</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @foreach($menu->allItems->whereNull('parent_id') as $item)
+                                <tbody id="sortable-menu-items">
+                                    @foreach($menu->allItems->whereNull('parent_id')->sortBy('order') as $item)
                                         @include('admin.menus.partials.menu-item-row', ['item' => $item, 'level' => 0])
                                     @endforeach
                                 </tbody>
@@ -344,8 +345,110 @@
     </div>
 </div>
 
+@push('styles')
+<style>
+.sortable-ghost {
+    opacity: 0.4;
+    background-color: #f8f9fc;
+}
+.sortable-drag {
+    opacity: 1;
+    cursor: move !important;
+}
+.drag-handle {
+    cursor: move;
+    color: #858796;
+}
+.drag-handle:hover {
+    color: #4e73df;
+}
+</style>
+@endpush
+
 @push('scripts')
+<!-- SortableJS -->
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
 <script>
+// Initialize drag and drop
+document.addEventListener('DOMContentLoaded', function() {
+    const sortableElement = document.getElementById('sortable-menu-items');
+    
+    if (sortableElement) {
+        const sortable = new Sortable(sortableElement, {
+            animation: 150,
+            handle: '.drag-handle',
+            ghostClass: 'sortable-ghost',
+            dragClass: 'sortable-drag',
+            onEnd: function(evt) {
+                // Get new order
+                const items = [];
+                document.querySelectorAll('#sortable-menu-items > tr').forEach((row, index) => {
+                    const itemId = row.getAttribute('data-item-id');
+                    if (itemId) {
+                        items.push({
+                            id: itemId,
+                            order: index
+                        });
+                    }
+                });
+
+                // Send AJAX request to update order
+                fetch('{{ route("admin.menus.update-order", $menu->id) }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({ items: items })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Show success message
+                        showAlert('success', 'Đã cập nhật thứ tự menu thành công!');
+                        // Update order numbers in table
+                        updateOrderNumbers();
+                    } else {
+                        showAlert('danger', 'Có lỗi xảy ra khi cập nhật thứ tự!');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showAlert('danger', 'Có lỗi xảy ra khi cập nhật thứ tự!');
+                });
+            }
+        });
+    }
+});
+
+function updateOrderNumbers() {
+    document.querySelectorAll('#sortable-menu-items > tr').forEach((row, index) => {
+        const orderCell = row.querySelector('td:nth-child(6)'); // Column "Thứ tự"
+        if (orderCell) {
+            orderCell.textContent = index;
+        }
+    });
+}
+
+function showAlert(type, message) {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+    alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    `;
+    
+    const container = document.querySelector('.container-fluid');
+    container.insertBefore(alertDiv, container.firstChild);
+    
+    setTimeout(() => {
+        alertDiv.remove();
+    }, 3000);
+}
+
 function editMenuItem(itemId) {
     // Fetch item data via AJAX or use data attributes
     fetch(`{{ route('admin.menus.edit', $menu->id) }}?item_id=${itemId}`)

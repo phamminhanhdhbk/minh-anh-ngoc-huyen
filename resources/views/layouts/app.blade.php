@@ -70,6 +70,27 @@
             margin: 2rem auto;
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
         }
+
+        /* Dropdown Menu Styles */
+        .navbar .dropdown-menu {
+            border: 0;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            border-radius: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .navbar .dropdown-item {
+            padding: 0.5rem 1.5rem;
+            transition: background-color 0.2s;
+        }
+
+        .navbar .dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .navbar .dropdown-toggle::after {
+            margin-left: 0.5rem;
+        }
     </style>
 
     @stack('styles')
@@ -143,11 +164,11 @@
                         @endif
 
                         <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-user me-1"></i>{{ Auth::user()->name }}
                             </a>
 
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 @if(Auth::user()->is_admin)
                                     <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">
                                         <i class="fas fa-tachometer-alt me-2"></i>Quản trị
@@ -249,10 +270,21 @@
     </footer>
     @endif
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- jQuery -->
+    <!-- jQuery (load first) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Initialize Bootstrap dropdowns
+        document.addEventListener('DOMContentLoaded', function() {
+            // Enable all dropdowns
+            var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+            var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+                return new bootstrap.Dropdown(dropdownToggleEl);
+            });
+        });
+    </script>
 
     <script>
         // Update cart count on page load

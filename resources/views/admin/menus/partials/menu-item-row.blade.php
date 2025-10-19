@@ -1,4 +1,9 @@
-<tr>
+<tr data-item-id="{{ $item->id }}" data-level="{{ $level }}">
+    <td class="text-center">
+        @if($level == 0)
+            <i class="fas fa-grip-vertical drag-handle" style="cursor: move;"></i>
+        @endif
+    </td>
     <td>{{ $item->id }}</td>
     <td>
         <div style="padding-left: {{ $level * 20 }}px;">

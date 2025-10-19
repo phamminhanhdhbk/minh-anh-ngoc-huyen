@@ -47,11 +47,11 @@
 
                         <div class="form-group">
                             <label for="name">Tên Theme <span class="text-danger">*</span></label>
-                            <input type="text" 
-                                   class="form-control @error('name') is-invalid @enderror" 
-                                   id="name" 
-                                   name="name" 
-                                   value="{{ old('name', $theme->name) }}" 
+                            <input type="text"
+                                   class="form-control @error('name') is-invalid @enderror"
+                                   id="name"
+                                   name="name"
+                                   value="{{ old('name', $theme->name) }}"
                                    required>
                             @error('name')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -60,11 +60,11 @@
 
                         <div class="form-group">
                             <label for="slug">Slug <span class="text-danger">*</span></label>
-                            <input type="text" 
-                                   class="form-control @error('slug') is-invalid @enderror" 
-                                   id="slug" 
-                                   name="slug" 
-                                   value="{{ old('slug', $theme->slug) }}" 
+                            <input type="text"
+                                   class="form-control @error('slug') is-invalid @enderror"
+                                   id="slug"
+                                   name="slug"
+                                   value="{{ old('slug', $theme->slug) }}"
                                    required>
                             <small class="form-text text-muted">Định danh unique cho theme</small>
                             @error('slug')
@@ -74,11 +74,11 @@
 
                         <div class="form-group">
                             <label for="view_path">View Path <span class="text-danger">*</span></label>
-                            <input type="text" 
-                                   class="form-control @error('view_path') is-invalid @enderror" 
-                                   id="view_path" 
-                                   name="view_path" 
-                                   value="{{ old('view_path', $theme->view_path) }}" 
+                            <input type="text"
+                                   class="form-control @error('view_path') is-invalid @enderror"
+                                   id="view_path"
+                                   name="view_path"
+                                   value="{{ old('view_path', $theme->view_path) }}"
                                    required>
                             <small class="form-text text-muted">Đường dẫn đến blade template (vd: welcome, themes.gradient.home)</small>
                             @error('view_path')
@@ -88,9 +88,9 @@
 
                         <div class="form-group">
                             <label for="description">Mô tả</label>
-                            <textarea class="form-control @error('description') is-invalid @enderror" 
-                                      id="description" 
-                                      name="description" 
+                            <textarea class="form-control @error('description') is-invalid @enderror"
+                                      id="description"
+                                      name="description"
                                       rows="3">{{ old('description', $theme->description) }}</textarea>
                             @error('description')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -99,10 +99,10 @@
 
                         <div class="form-group">
                             <label for="author">Tác giả</label>
-                            <input type="text" 
-                                   class="form-control @error('author') is-invalid @enderror" 
-                                   id="author" 
-                                   name="author" 
+                            <input type="text"
+                                   class="form-control @error('author') is-invalid @enderror"
+                                   id="author"
+                                   name="author"
                                    value="{{ old('author', $theme->author) }}">
                             @error('author')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -111,10 +111,10 @@
 
                         <div class="form-group">
                             <label for="version">Version</label>
-                            <input type="text" 
-                                   class="form-control @error('version') is-invalid @enderror" 
-                                   id="version" 
-                                   name="version" 
+                            <input type="text"
+                                   class="form-control @error('version') is-invalid @enderror"
+                                   id="version"
+                                   name="version"
                                    value="{{ old('version', $theme->version) }}"
                                    placeholder="1.0.0">
                             @error('version')
@@ -126,15 +126,15 @@
                             <label for="thumbnail">Thumbnail</label>
                             @if($theme->thumbnail)
                                 <div class="mb-2">
-                                    <img src="{{ asset($theme->thumbnail) }}" 
-                                         alt="{{ $theme->name }}" 
+                                    <img src="{{ asset($theme->thumbnail) }}"
+                                         alt="{{ $theme->name }}"
                                          class="img-thumbnail"
                                          style="max-width: 300px;">
                                 </div>
                             @endif
-                            <input type="file" 
-                                   class="form-control-file @error('thumbnail') is-invalid @enderror" 
-                                   id="thumbnail" 
+                            <input type="file"
+                                   class="form-control-file @error('thumbnail') is-invalid @enderror"
+                                   id="thumbnail"
                                    name="thumbnail"
                                    accept="image/*">
                             <small class="form-text text-muted">Ảnh xem trước theme (JPEG, PNG, JPG, GIF - Max: 2MB)</small>
@@ -145,11 +145,11 @@
 
                         <div class="form-group">
                             <label for="order">Thứ tự</label>
-                            <input type="number" 
-                                   class="form-control @error('order') is-invalid @enderror" 
-                                   id="order" 
-                                   name="order" 
-                                   value="{{ old('order', $theme->order) }}" 
+                            <input type="number"
+                                   class="form-control @error('order') is-invalid @enderror"
+                                   id="order"
+                                   name="order"
+                                   value="{{ old('order', $theme->order) }}"
                                    min="0">
                             @error('order')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -159,11 +159,11 @@
                         <div class="form-group">
                             <div class="custom-control custom-checkbox">
                                 <input type="hidden" name="is_default" value="0">
-                                <input type="checkbox" 
-                                       class="custom-control-input" 
-                                       id="is_default" 
-                                       name="is_default" 
-                                       value="1" 
+                                <input type="checkbox"
+                                       class="custom-control-input"
+                                       id="is_default"
+                                       name="is_default"
+                                       value="1"
                                        {{ old('is_default', $theme->is_default) ? 'checked' : '' }}>
                                 <label class="custom-control-label" for="is_default">
                                     Đặt làm theme mặc định
@@ -199,7 +199,7 @@
                     @if(!$theme->is_active)
                         <form action="{{ route('admin.themes.activate', $theme->id) }}" method="POST" class="mb-3">
                             @csrf
-                            <button type="submit" 
+                            <button type="submit"
                                     class="btn btn-success btn-block"
                                     onclick="return confirm('Bạn có chắc muốn kích hoạt theme này?')">
                                 <i class="fas fa-check"></i> Kích hoạt Theme
@@ -211,14 +211,14 @@
                         </div>
                     @endif
 
-                    <a href="{{ route('admin.themes.preview', $theme->id) }}" 
+                    <a href="{{ route('admin.themes.preview', $theme->id) }}"
                        class="btn btn-info btn-block mb-3"
                        target="_blank">
                         <i class="fas fa-eye"></i> Xem trước Theme
                     </a>
 
                     @if(!$theme->is_active && !$theme->is_default)
-                        <form action="{{ route('admin.themes.destroy', $theme->id) }}" 
+                        <form action="{{ route('admin.themes.destroy', $theme->id) }}"
                               method="POST"
                               onsubmit="return confirm('Bạn có chắc muốn xóa theme này?');">
                             @csrf
@@ -290,7 +290,7 @@
                 <div class="card-body">
                     <form action="{{ route('admin.themes.updateSettings', $theme->id) }}" method="POST">
                         @csrf
-                        
+
                         @php
                             $settings = $theme->settings ?? [];
                         @endphp
@@ -298,28 +298,28 @@
                         @if($theme->slug === 'gradient-modern')
                             <div class="form-group">
                                 <label for="primary_color">Primary Color</label>
-                                <input type="color" 
-                                       class="form-control" 
-                                       id="primary_color" 
-                                       name="settings[primary_color]" 
+                                <input type="color"
+                                       class="form-control"
+                                       id="primary_color"
+                                       name="settings[primary_color]"
                                        value="{{ $settings['primary_color'] ?? '#667eea' }}">
                             </div>
 
                             <div class="form-group">
                                 <label for="secondary_color">Secondary Color</label>
-                                <input type="color" 
-                                       class="form-control" 
-                                       id="secondary_color" 
-                                       name="settings[secondary_color]" 
+                                <input type="color"
+                                       class="form-control"
+                                       id="secondary_color"
+                                       name="settings[secondary_color]"
                                        value="{{ $settings['secondary_color'] ?? '#764ba2' }}">
                             </div>
 
                             <div class="form-group">
                                 <label for="accent_color">Accent Color</label>
-                                <input type="color" 
-                                       class="form-control" 
-                                       id="accent_color" 
-                                       name="settings[accent_color]" 
+                                <input type="color"
+                                       class="form-control"
+                                       id="accent_color"
+                                       name="settings[accent_color]"
                                        value="{{ $settings['accent_color'] ?? '#f093fb' }}">
                             </div>
                         @else

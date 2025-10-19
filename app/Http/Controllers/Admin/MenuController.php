@@ -194,15 +194,14 @@ class MenuController extends Controller
     {
         $items = $request->input('items', []);
 
-        foreach ($items as $index => $itemData) {
+        foreach ($items as $itemData) {
             MenuItem::where('id', $itemData['id'])
                 ->where('menu_id', $menuId)
                 ->update([
-                    'order' => $index,
-                    'parent_id' => $itemData['parent_id'] ?? null
+                    'order' => $itemData['order']
                 ]);
         }
 
-        return response()->json(['success' => true]);
+        return response()->json(['success' => true, 'message' => 'Đã cập nhật thứ tự menu']);
     }
 }
