@@ -75,8 +75,16 @@ class MenuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
+        // If requesting specific menu item data (for AJAX edit modal)
+        if ($request->has('item_id')) {
+            $item = MenuItem::where('menu_id', $id)
+                ->findOrFail($request->item_id);
+            
+            return response()->json($item);
+        }
+
         $menu = Menu::with(['allItems' => function($query) {
             $query->orderBy('order');
         }])->findOrFail($id);

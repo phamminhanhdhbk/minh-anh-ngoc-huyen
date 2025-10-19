@@ -108,4 +108,31 @@
         </div>
     </div>
 </div>
+
+@push('styles')
+<style>
+/* Better badge visibility */
+.badge-success {
+    background-color: #1cc88a !important;
+    color: white !important;
+}
+.badge-danger {
+    background-color: #e74a3b !important;
+    color: white !important;
+}
+.badge-info {
+    background-color: #36b9cc !important;
+    color: white !important;
+}
+.badge-secondary {
+    background-color: #858796 !important;
+    color: white !important;
+}
+
+/* Table styling */
+.table-hover tbody tr:hover {
+    background-color: #f8f9fc;
+}
+</style>
+@endpush
 @endsection

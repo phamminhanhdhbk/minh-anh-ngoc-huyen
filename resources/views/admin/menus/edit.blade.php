@@ -362,6 +362,31 @@
 .drag-handle:hover {
     color: #4e73df;
 }
+
+/* Better badge visibility */
+.badge-success {
+    background-color: #1cc88a !important;
+    color: white !important;
+}
+.badge-danger {
+    background-color: #e74a3b !important;
+    color: white !important;
+}
+.badge-info {
+    background-color: #36b9cc !important;
+    color: white !important;
+}
+.badge-secondary {
+    background-color: #858796 !important;
+    color: white !important;
+}
+
+/* Table header styling */
+.thead-light th {
+    background-color: #f8f9fc;
+    color: #5a5c69;
+    font-weight: 600;
+}
 </style>
 @endpush
 
@@ -465,7 +490,9 @@ function editMenuItem(itemId) {
             document.getElementById('edit_order').value = data.order;
             document.getElementById('edit_is_active').checked = data.is_active;
 
-            document.getElementById('editForm').action = `{{ route('admin.menus.edit', $menu->id) }}/items/${itemId}`;
+            // Set form action to update route
+            const updateUrl = '{{ route("admin.menus.items.update", [$menu->id, ":itemId"]) }}';
+            document.getElementById('editForm').action = updateUrl.replace(':itemId', itemId);
 
             $('#editModal').modal('show');
         });
