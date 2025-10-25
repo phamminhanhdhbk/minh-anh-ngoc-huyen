@@ -373,6 +373,38 @@
         function confirmDelete(message) {
             return confirm(message || 'Bạn có chắc chắn muốn xóa?');
         }
+
+        // Auto-refresh CSRF token every 60 minutes to prevent 419 errors
+        setInterval(function() {
+            fetch('{{ route('admin.dashboard') }}', {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }).then(function(response) {
+                return response.text();
+            }).then(function(html) {
+                // Extract new CSRF token from response
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const newToken = doc.querySelector('meta[name="csrf-token"]');
+
+                if (newToken) {
+                    // Update meta tag
+                    document.querySelector('meta[name="csrf-token"]').setAttribute('content', newToken.content);
+
+                    // Update all CSRF input fields
+                    document.querySelectorAll('input[name="_token"]').forEach(function(input) {
+                        input.value = newToken.content;
+                    });
+
+                    console.log('CSRF token refreshed at ' + new Date().toLocaleTimeString());
+                }
+            }).catch(function(error) {
+                console.error('Failed to refresh CSRF token:', error);
+            });
+        }, 3600000); // 60 minutes = 3600000 milliseconds
+
     </script>
 
     @stack('scripts')

@@ -144,7 +144,11 @@
                         @error('images.*')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <div class="form-text">Chọn nhiều file ảnh (JPEG, PNG, JPG, GIF - tối đa 2MB mỗi file)</div>
+                        <div class="form-text">
+                            <i class="fas fa-info-circle text-info"></i>
+                            Hỗ trợ: JPEG, PNG, JPG, GIF, WebP. <strong>Tối đa 20MB/ảnh.</strong>
+                            Nếu upload nhiều ảnh lớn, hãy đợi thanh progress hoàn tất.
+                        </div>
 
                         <!-- Image Preview -->
                         <div id="imagePreview" class="mt-3 row"></div>

@@ -66,11 +66,14 @@ class ProductController extends Controller
             'stock' => 'required|integer|min:0',
             'sku' => 'nullable|string|unique:products,sku',
             'image' => 'nullable|url',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:20480', // Max 20MB per image
             'image_urls' => 'nullable|string',
             'category_id' => 'required|exists:categories,id',
             'status' => 'boolean',
             'featured' => 'boolean'
+        ], [
+            'images.*.max' => 'Mỗi hình ảnh không được vượt quá 20MB. Vui lòng nén ảnh trước khi upload.',
+            'images.*.image' => 'File phải là hình ảnh (JPEG, PNG, JPG, GIF, WebP).',
         ]);
 
         $product = Product::create([
@@ -120,11 +123,14 @@ class ProductController extends Controller
             'stock' => 'required|integer|min:0',
             'sku' => 'nullable|string|unique:products,sku,' . $product->id,
             'image' => 'nullable|url',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:20480', // Max 20MB per image
             'image_urls' => 'nullable|string',
             'category_id' => 'required|exists:categories,id',
             'status' => 'boolean',
             'featured' => 'boolean'
+        ], [
+            'images.*.max' => 'Mỗi hình ảnh không được vượt quá 20MB. Vui lòng nén ảnh trước khi upload.',
+            'images.*.image' => 'File phải là hình ảnh (JPEG, PNG, JPG, GIF, WebP).',
         ]);
 
         $product->update([

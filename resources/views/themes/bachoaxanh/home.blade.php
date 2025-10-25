@@ -37,23 +37,33 @@
                     @foreach($headerMenu->items as $item)
                         @php
                             $hasChildren = $item->children->where('is_active', true)->count() > 0;
-                            $itemUrl = $item->url ?: ($item->route ? route($item->route) : '#');
+                            try {
+                                $itemUrl = $item->url ?: ($item->route ? route($item->route) : '#');
+                            } catch (\Exception $e) {
+                                $itemUrl = '#';
+                            }
                             $isActive = request()->url() === $itemUrl || ($item->route && request()->routeIs($item->route));
                         @endphp
                         <li class="nav-item{{ $hasChildren ? ' dropdown' : '' }}">
                             @if($hasChildren)
-                                <a class="nav-link dropdown-toggle{{ $isActive ? ' active' : '' }}" 
-                                   href="{{ $itemUrl }}" 
-                                   role="button" 
+                                <a class="nav-link dropdown-toggle{{ $isActive ? ' active' : '' }}"
+                                   href="{{ $itemUrl }}"
+                                   role="button"
                                    data-bs-toggle="dropdown">
                                     @if($item->icon)<i class="{{ $item->icon }} me-1"></i>@endif
                                     {{ $item->title }}
                                 </a>
                                 <ul class="dropdown-menu">
                                     @foreach($item->children->where('is_active', true)->sortBy('order') as $child)
+                                        @php
+                                            try {
+                                                $childUrl = $child->url ?: ($child->route ? route($child->route) : '#');
+                                            } catch (\Exception $e) {
+                                                $childUrl = '#';
+                                            }
+                                        @endphp
                                         <li>
-                                            <a class="dropdown-item" 
-                                               href="{{ $child->url ?: ($child->route ? route($child->route) : '#') }}">
+                                            <a class="dropdown-item" href="{{ $childUrl }}">
                                                 @if($child->icon)<i class="{{ $child->icon }} me-1"></i>@endif
                                                 {{ $child->title }}
                                             </a>
@@ -92,7 +102,7 @@
                         <a href="{{ route('cart.index') }}" class="btn btn-light position-relative">
                             <i class="fas fa-shopping-cart text-success"></i>
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-count">
-                                0
+                                {{ \App\Cart::where('session_id', session()->getId())->sum('quantity') }}
                             </span>
                         </a>
                     </li>
@@ -182,16 +192,15 @@
             <!-- Main Content -->
             <div class="col-lg-10 col-md-9">
                 <!-- Flash Sale Banner -->
-                <!-- Flash Sale Banner - Top Categories -->
                 @php
-                    $flashCategories = App\Category::withCount('products')
-                        ->having('products_count', '>', 0)
+                    $flashSaleCategories = \App\Category::where('status', true)
+                        ->withCount('products')
                         ->orderBy('products_count', 'desc')
                         ->take(8)
                         ->get();
                 @endphp
-                
-                @if($flashCategories->count() > 0)
+
+                @if($flashSaleCategories->count() > 0)
                 <div class="flash-sale-banner mt-3 mb-3">
                     <div class="row g-2">
                         <div class="col-md-2">
@@ -202,52 +211,50 @@
                                 </div>
                             </div>
                         </div>
-                        @foreach($flashCategories as $index => $category)
+                        @foreach($flashSaleCategories as $index => $category)
                         <div class="col">
-                            <a href="{{ route('categories.show', $category->slug) }}" class="text-decoration-none">
-                                <div class="quick-cat-item bg-white rounded text-center p-2 border h-100">
-                                    @if($index == 0)
-                                        <div class="badge bg-danger text-white mb-1">HOT</div>
-                                    @elseif($index == 1)
-                                        <div class="badge bg-success text-white mb-1">NEW</div>
+                            <div class="quick-cat-item bg-white rounded text-center p-2 border h-100">
+                                @if($index == 0)
+                                    <div class="badge bg-danger text-white mb-1">-33%</div>
+                                @elseif($index == 1)
+                                    <div class="badge bg-success text-white mb-1">-27%</div>
+                                @endif
+                                <div class="cat-icon mb-1">
+                                    @if($category->image)
+                                        <img src="{{ asset('storage/' . $category->image) }}" class="img-fluid" alt="{{ $category->name }}" style="max-height: 50px;">
+                                    @else
+                                        <i class="fas fa-box fa-2x text-success"></i>
                                     @endif
-                                    <div class="cat-icon mb-1">
-                                        @if($category->icon)
-                                            <i class="{{ $category->icon }} fa-2x text-success"></i>
-                                        @else
-                                            <i class="fas fa-box fa-2x text-success"></i>
-                                        @endif
-                                    </div>
-                                    <small class="d-block text-truncate text-dark">{{ $category->name }}</small>
-                                    <small class="text-muted" style="font-size: 0.7rem;">{{ $category->products_count }} SP</small>
                                 </div>
-                            </a>
+                                <small class="d-block text-truncate">
+                                    <a href="{{ route('products.index', ['category' => $category->id]) }}" class="text-dark text-decoration-none">
+                                        {{ $category->name }}
+                                    </a>
+                                </small>
+                            </div>
                         </div>
                         @endforeach
                     </div>
                 </div>
                 @endif
 
-                <!-- Category Pills - All Categories -->
+                <!-- Category Pills -->
                 @php
-                    $allCategories = App\Category::withCount('products')
-                        ->having('products_count', '>', 0)
-                        ->orderBy('name')
+                    $pillCategories = \App\Category::where('status', true)
+                        ->withCount('products')
+                        ->orderBy('id')
+                        ->take(10)
                         ->get();
                 @endphp
-                
-                @if($allCategories->count() > 0)
+
+                @if($pillCategories->count() > 0)
                 <div class="category-pills mb-3">
                     <div class="d-flex gap-2 flex-wrap">
-                        @foreach($allCategories as $index => $category)
-                        <a href="{{ route('categories.show', $category->slug) }}" class="text-decoration-none">
-                            <span class="badge {{ $index == 0 ? 'bg-success text-white' : 'bg-light text-dark' }} px-3 py-2">
-                                @if($category->icon)
-                                    <i class="{{ $category->icon }} me-1"></i>
-                                @endif
+                        @foreach($pillCategories as $index => $category)
+                            <a href="{{ route('products.index', ['category' => $category->id]) }}"
+                               class="badge {{ $index == 0 ? 'bg-success text-white' : 'bg-light text-dark' }} px-3 py-2 text-decoration-none">
                                 {{ $category->name }}
-                            </span>
-                        </a>
+                            </a>
                         @endforeach
                     </div>
                 </div>
@@ -282,7 +289,7 @@
                                                      class="img-fluid"
                                                      alt="{{ $product->name }}">
                                             @else
-                                                <img src="{{ asset('images/no-image.png') }}"
+                                                <img src="https://via.placeholder.com/150"
                                                      class="img-fluid"
                                                      alt="{{ $product->name }}">
                                             @endif
@@ -312,8 +319,10 @@
                                             @endif
                                         </div>
 
-                                        <button class="btn btn-success btn-sm w-100 btn-add-cart-bhx">
-                                            MUA
+                                        <button class="btn btn-success btn-sm w-100 btn-add-cart-bhx"
+                                                data-product-id="{{ $product->id }}"
+                                                data-product-name="{{ $product->name }}">
+                                            <i class="fas fa-shopping-cart me-1"></i>MUA
                                         </button>
                                     </div>
                                 </div>
@@ -351,7 +360,7 @@
                                                  class="img-fluid"
                                                  alt="{{ $product->name }}">
                                         @else
-                                            <img src="{{ asset('images/no-image.png') }}"
+                                            <img src="https://via.placeholder.com/150"
                                                  class="img-fluid"
                                                  alt="{{ $product->name }}">
                                         @endif
@@ -372,8 +381,10 @@
                                         </div>
                                     </div>
 
-                                    <button class="btn btn-success btn-sm w-100 btn-add-cart-bhx">
-                                        MUA
+                                    <button class="btn btn-success btn-sm w-100 btn-add-cart-bhx"
+                                            data-product-id="{{ $product->id }}"
+                                            data-product-name="{{ $product->name }}">
+                                        <i class="fas fa-shopping-cart me-1"></i>MUA
                                     </button>
                                 </div>
                             </div>
@@ -403,7 +414,7 @@
                                                  class="img-fluid"
                                                  alt="{{ $product->name }}">
                                         @else
-                                            <img src="{{ asset('images/no-image.png') }}"
+                                            <img src="https://via.placeholder.com/150"
                                                  class="img-fluid"
                                                  alt="{{ $product->name }}">
                                         @endif
@@ -424,8 +435,10 @@
                                         </div>
                                     </div>
 
-                                    <button class="btn btn-success btn-sm w-100 btn-add-cart-bhx">
-                                        MUA
+                                    <button class="btn btn-success btn-sm w-100 btn-add-cart-bhx"
+                                            data-product-id="{{ $product->id }}"
+                                            data-product-name="{{ $product->name }}">
+                                        <i class="fas fa-shopping-cart me-1"></i>MUA
                                     </button>
                                 </div>
                             </div>
@@ -728,3 +741,78 @@
     </div>
 </footer>
 @endsection
+
+@push('scripts')
+<script>
+$(document).ready(function() {
+    // Add to cart functionality
+    $('.btn-add-cart-bhx').click(function(e) {
+        e.preventDefault();
+
+        const button = $(this);
+        const productId = button.data('product-id');
+        const productName = button.data('product-name');
+
+        // Disable button
+        button.prop('disabled', true);
+        const originalText = button.html();
+        button.html('<i class="fas fa-spinner fa-spin me-1"></i>Đang thêm...');
+
+        // Send AJAX request
+        $.ajax({
+            url: '{{ route("cart.add") }}',
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                product_id: productId,
+                quantity: 1
+            },
+            success: function(response) {
+                console.log('Cart response:', response);
+
+                if(response.success) {
+                    // Update cart count in navbar
+                    if(response.cart_count !== undefined) {
+                        $('.cart-count').text(response.cart_count);
+                        console.log('Cart count updated to:', response.cart_count);
+                    }
+
+                    // Show success message
+                    button.html('<i class="fas fa-check me-1"></i>Đã thêm!');
+                    button.removeClass('btn-success').addClass('btn-secondary');
+
+                    // Show toast notification
+                    if(typeof showToast === 'function') {
+                        showToast('Thành công', 'Đã thêm ' + productName + ' vào giỏ hàng', 'success');
+                    } else {
+                        alert('Đã thêm sản phẩm vào giỏ hàng!');
+                    }
+
+                    // Reset button after 2 seconds
+                    setTimeout(function() {
+                        button.html(originalText);
+                        button.removeClass('btn-secondary').addClass('btn-success');
+                        button.prop('disabled', false);
+                    }, 2000);
+                } else {
+                    button.html(originalText);
+                    button.prop('disabled', false);
+                    alert(response.message || 'Có lỗi xảy ra!');
+                }
+            },
+            error: function(xhr) {
+                button.html(originalText);
+                button.prop('disabled', false);
+
+                if(xhr.status === 401) {
+                    alert('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!');
+                    window.location.href = '{{ route("login") }}';
+                } else {
+                    alert('Có lỗi xảy ra! Vui lòng thử lại.');
+                }
+            }
+        });
+    });
+});
+</script>
+@endpush

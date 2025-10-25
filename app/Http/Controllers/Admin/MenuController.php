@@ -81,7 +81,7 @@ class MenuController extends Controller
         if ($request->has('item_id')) {
             $item = MenuItem::where('menu_id', $id)
                 ->findOrFail($request->item_id);
-            
+
             return response()->json($item);
         }
 

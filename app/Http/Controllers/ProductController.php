@@ -6,11 +6,16 @@ use Illuminate\Http\Request;
 use App\Product;
 use App\Category;
 use App\Review;
+use App\Theme;
 
 class ProductController extends Controller
 {
     public function index(Request $request)
     {
+        // Get theme (preview mode or active theme)
+        $themeId = session('preview_theme_id');
+        $theme = $themeId ? Theme::find($themeId) : Theme::getActiveTheme();
+
         $query = Product::where('status', true)->with(['category', 'primaryImage']);
 
         if ($request->has('category')) {
@@ -31,7 +36,24 @@ class ProductController extends Controller
         $products = $query->paginate(12);
         $categories = Category::where('status', true)->get();
 
-        return view('products.index', compact('products', 'categories'));
+        // Determine which view to render based on theme
+        $view = 'products.index'; // default view
+
+        if ($theme && $theme->view_path) {
+            // Extract theme folder from view_path
+            // Example: themes.bachoaxanh.home -> bachoaxanh
+            $viewParts = explode('.', $theme->view_path);
+            if (count($viewParts) >= 2 && $viewParts[0] === 'themes') {
+                $themeFolder = $viewParts[1];
+                $themeProductsView = 'themes.' . $themeFolder . '.products';
+
+                if (view()->exists($themeProductsView)) {
+                    $view = $themeProductsView;
+                }
+            }
+        }
+
+        return view($view, compact('products', 'categories', 'theme'));
     }
 
     public function show(Product $product)

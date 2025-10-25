@@ -47,9 +47,13 @@ class CartController extends Controller
             ]);
         }
 
+        // Get total cart count
+        $cartCount = Cart::where('session_id', $sessionId)->sum('quantity');
+
         return response()->json([
             'success' => true,
-            'message' => 'Sản phẩm đã được thêm vào giỏ hàng!'
+            'message' => 'Sản phẩm đã được thêm vào giỏ hàng!',
+            'cart_count' => $cartCount
         ]);
     }
 
@@ -62,19 +66,27 @@ class CartController extends Controller
         $cart->quantity = $request->quantity;
         $cart->save();
 
+        $sessionId = session()->getId();
+        $cartCount = Cart::where('session_id', $sessionId)->sum('quantity');
+
         return response()->json([
             'success' => true,
-            'message' => 'Giỏ hàng đã được cập nhật!'
+            'message' => 'Giỏ hàng đã được cập nhật!',
+            'cart_count' => $cartCount
         ]);
     }
 
     public function remove(Cart $cart)
     {
+        $sessionId = session()->getId();
         $cart->delete();
+
+        $cartCount = Cart::where('session_id', $sessionId)->sum('quantity');
 
         return response()->json([
             'success' => true,
-            'message' => 'Sản phẩm đã được xóa khỏi giỏ hàng!'
+            'message' => 'Sản phẩm đã được xóa khỏi giỏ hàng!',
+            'cart_count' => $cartCount
         ]);
     }
 

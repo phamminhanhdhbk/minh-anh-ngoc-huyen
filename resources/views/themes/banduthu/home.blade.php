@@ -37,23 +37,33 @@
                     @foreach($headerMenu->items as $item)
                         @php
                             $hasChildren = $item->children->where('is_active', true)->count() > 0;
-                            $itemUrl = $item->url ?: ($item->route ? route($item->route) : '#');
+                            try {
+                                $itemUrl = $item->url ?: ($item->route ? route($item->route) : '#');
+                            } catch (\Exception $e) {
+                                $itemUrl = '#';
+                            }
                             $isActive = request()->url() === $itemUrl || ($item->route && request()->routeIs($item->route));
                         @endphp
                         <li class="nav-item{{ $hasChildren ? ' dropdown' : '' }}">
                             @if($hasChildren)
-                                <a class="nav-link dropdown-toggle{{ $isActive ? ' active' : '' }}" 
-                                   href="{{ $itemUrl }}" 
-                                   role="button" 
+                                <a class="nav-link dropdown-toggle{{ $isActive ? ' active' : '' }}"
+                                   href="{{ $itemUrl }}"
+                                   role="button"
                                    data-bs-toggle="dropdown">
                                     @if($item->icon)<i class="{{ $item->icon }} me-1"></i>@endif
                                     {{ $item->title }}
                                 </a>
                                 <ul class="dropdown-menu">
                                     @foreach($item->children->where('is_active', true)->sortBy('order') as $child)
+                                        @php
+                                            try {
+                                                $childUrl = $child->url ?: ($child->route ? route($child->route) : '#');
+                                            } catch (\Exception $e) {
+                                                $childUrl = '#';
+                                            }
+                                        @endphp
                                         <li>
-                                            <a class="dropdown-item" 
-                                               href="{{ $child->url ?: ($child->route ? route($child->route) : '#') }}">
+                                            <a class="dropdown-item" href="{{ $childUrl }}">
                                                 @if($child->icon)<i class="{{ $child->icon }} me-1"></i>@endif
                                                 {{ $child->title }}
                                             </a>
