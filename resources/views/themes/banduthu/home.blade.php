@@ -692,7 +692,7 @@
             </div>
             <div class="col-md-4">
                 <h5 class="fw-bold">Theo dõi chúng tôi</h5>
-                <div class="d-flex gap-3 mt-3">
+                <div class="d-flex gap-3 mt-3 align-items-center">
                     @if(setting('social_facebook'))
                     <a href="{{ setting('social_facebook') }}" class="text-white" target="_blank">
                         <i class="fab fa-facebook fa-2x"></i>
@@ -706,6 +706,16 @@
                     @if(setting('social_youtube'))
                     <a href="{{ setting('social_youtube') }}" class="text-white" target="_blank">
                         <i class="fab fa-youtube fa-2x"></i>
+                    </a>
+                    @endif
+                    @if(setting('social_tiktok'))
+                    <a href="{{ setting('social_tiktok') }}" class="text-white" target="_blank">
+                        <i class="fab fa-tiktok fa-2x"></i>
+                    </a>
+                    @endif
+                    @if(setting('social_zalo'))
+                    <a href="{{ setting('social_zalo') }}" target="_blank" title="Zalo" class="d-flex align-items-center">
+                        <img src="{{ asset('images/social-icons/zalo.png') }}" alt="Zalo" style="width: 40px; height: 40px;">
                     </a>
                     @endif
                 </div>

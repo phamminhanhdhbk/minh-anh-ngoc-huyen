@@ -199,9 +199,13 @@
                                 </div>
                             </td>
                             <td>
+                                @if($review->product)
                                 <a href="{{ route('products.show', $review->product) }}" target="_blank">
                                     {{ Str::limit($review->product->name, 30) }}
                                 </a>
+                                @else
+                                <span class="text-muted text-decoration-line-through">{{ Str::limit('Sản phẩm đã bị xóa', 30) }}</span>
+                                @endif
                             </td>
                             <td>
                                 <div class="d-flex align-items-center">

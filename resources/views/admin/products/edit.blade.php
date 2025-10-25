@@ -76,11 +76,13 @@
                         <div class="col-md-6 mb-3">
                             <label for="price" class="form-label">Giá gốc <span class="text-danger">*</span></label>
                             <div class="input-group">
-                                <input type="number" class="form-control @error('price') is-invalid @enderror"
-                                       id="price" name="price" value="{{ old('price', $product->price) }}"
-                                       min="0" step="1000" required>
+                                <input type="text" class="form-control @error('price') is-invalid @enderror price-input"
+                                       id="price" name="price_display" value="{{ old('price', $product->price) }}"
+                                       placeholder="0" required>
                                 <span class="input-group-text">₫</span>
                             </div>
+                            <input type="hidden" id="price_hidden" name="price" value="{{ old('price', $product->price) }}">
+                            <div class="price-text mt-2" style="font-size: 0.9rem; color: #666;"></div>
                             @error('price')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -89,11 +91,13 @@
                         <div class="col-md-6 mb-3">
                             <label for="sale_price" class="form-label">Giá khuyến mãi</label>
                             <div class="input-group">
-                                <input type="number" class="form-control @error('sale_price') is-invalid @enderror"
-                                       id="sale_price" name="sale_price" value="{{ old('sale_price', $product->sale_price) }}"
-                                       min="0" step="1000">
+                                <input type="text" class="form-control @error('sale_price') is-invalid @enderror price-input"
+                                       id="sale_price" name="sale_price_display" value="{{ old('sale_price', $product->sale_price) }}"
+                                       placeholder="0">
                                 <span class="input-group-text">₫</span>
                             </div>
+                            <input type="hidden" id="sale_price_hidden" name="sale_price" value="{{ old('sale_price', $product->sale_price) }}">
+                            <div class="price-text mt-2" style="font-size: 0.9rem; color: #666;"></div>
                             @error('sale_price')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -296,12 +300,13 @@
 $(document).ready(function() {
     // Auto calculate discount
     $('#price, #sale_price').on('input', function() {
-        const price = parseFloat($('#price').val()) || 0;
-        const salePrice = parseFloat($('#sale_price').val()) || 0;
+        const price = parseInt($('#price_hidden').val()) || 0;
+        const salePrice = parseInt($('#sale_price_hidden').val()) || 0;
 
         if (salePrice > 0 && salePrice >= price) {
             alert('Giá khuyến mãi phải nhỏ hơn giá gốc!');
-            $('#sale_price').val('{{ $product->sale_price }}');
+            $('#sale_price').val('');
+            $('#sale_price_hidden').val('');
         }
     });
 
@@ -415,6 +420,115 @@ $(document).ready(function() {
             }
         });
     });
+    // Format price input and display in words
+    function formatPriceInput(selector, hiddenSelector) {
+        const input = $(selector);
+        const hiddenInput = $(hiddenSelector);
+        const display = input.closest('.mb-3').find('.price-text');
+
+        console.log('formatPriceInput called for', selector);
+        console.log('Input element:', input);
+        console.log('Hidden input element:', hiddenInput);
+        console.log('Display element:', display);
+
+        function updateDisplay() {
+            let value = input.val();
+            console.log('Current value:', value);
+            
+            if (!value || value === '') {
+                display.html('');
+                input.val('');
+                hiddenInput.val('');
+                return;
+            }
+
+            // Remove all non-digit characters to get clean number
+            const cleanString = value.replace(/\D/g, '');
+            const cleanValue = parseInt(cleanString) || 0;
+            console.log('Clean value:', cleanValue);
+            
+            if (cleanValue === 0) {
+                display.html('');
+                input.val('');
+                hiddenInput.val('');
+                return;
+            }
+
+            // Format with thousands separator (e.g., 4000000 -> 4.000.000)
+            const formatted = new Intl.NumberFormat('vi-VN').format(cleanValue);
+            console.log('Formatted:', formatted);
+            
+            // Update input to show formatted value
+            input.val(formatted);
+            
+            // Update hidden input with clean number value for backend
+            hiddenInput.val(cleanValue);
+            console.log('Hidden input value:', cleanValue);
+            
+            // Convert to words in Vietnamese
+            const priceInWords = numberToVietnameseCurrency(cleanValue);
+            console.log('Price in words:', priceInWords);
+            
+            const displayText = `<strong>${formatted}₫</strong> (${priceInWords})`;
+            console.log('Display text:', displayText);
+            
+            display.html(displayText);
+        }
+
+        // Format when losing focus
+        input.on('blur', updateDisplay);
+        
+        // Allow typing only numbers and format on input
+        input.on('input', function() {
+            let value = $(this).val();
+            // Remove all non-digit characters
+            let cleanValue = value.replace(/\D/g, '');
+            $(this).val(cleanValue);
+        });
+        
+        // Format when pressing enter
+        input.on('keypress', function(e) {
+            if (e.which === 13) {
+                updateDisplay();
+            }
+        });
+        
+        // Initialize on page load
+        updateDisplay();
+    }
+
+    // Convert number to Vietnamese currency words
+    function numberToVietnameseCurrency(num) {
+        if (num === 0 || !num) return '';
+
+        // Simple version - just show the number formatted
+        const units = ['', 'nghìn', 'triệu', 'tỷ'];
+        let parts = [];
+        let unitIndex = 0;
+
+        while (num > 0 && unitIndex < units.length) {
+            const remainder = num % 1000;
+            if (remainder > 0) {
+                parts.unshift(remainder + (units[unitIndex] ? ' ' + units[unitIndex] : ''));
+            }
+            num = Math.floor(num / 1000);
+            unitIndex++;
+        }
+
+        return parts.join(' ');
+    }
+
+    // Initialize price formatting
+    console.log('Initializing price formatting...');
+    
+    // Test if jQuery and selectors work
+    console.log('Price input:', $('#price'));
+    console.log('Sale price input:', $('#sale_price'));
+    
+    formatPriceInput('#price', '#price_hidden');
+    formatPriceInput('#sale_price', '#sale_price_hidden');
+    
+    console.log('Price formatting initialized');
 });
 </script>
 @endpush

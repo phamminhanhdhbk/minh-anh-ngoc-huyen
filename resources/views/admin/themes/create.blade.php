@@ -243,29 +243,33 @@
 
 @push('scripts')
 <script>
-// Auto generate slug from name
-document.getElementById('name').addEventListener('input', function() {
-    let name = this.value;
-    let slug = name.toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/đ/g, 'd')
-        .replace(/[^a-z0-9\s-]/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-')
-        .trim();
-    document.getElementById('slug').value = slug;
-});
+$(document).ready(function() {
+    // Auto generate slug from name
+    let userEditedSlug = false;
 
-// Preview image before upload
-document.getElementById('thumbnail').addEventListener('change', function(e) {
-    if (e.target.files && e.target.files[0]) {
-        let reader = new FileReader();
-        reader.onload = function(e) {
-            // You can add image preview here if needed
-        };
-        reader.readAsDataURL(e.target.files[0]);
-    }
+    $('#name').on('input', function() {
+        if (!userEditedSlug) {
+            let name = $(this).val();
+            let slug = name.toLowerCase()
+                .replace(/á|à|ả|ã|ạ|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a')
+                .replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e')
+                .replace(/i|í|ì|ỉ|ĩ|ị/gi, 'i')
+                .replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, 'o')
+                .replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, 'u')
+                .replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y')
+                .replace(/đ/gi, 'd')
+                .replace(/[^a-z0-9\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .replace(/^-|-$/g, '');
+            $('#slug').val(slug);
+        }
+    });
+
+    // Track if user manually edits slug
+    $('#slug').on('input', function() {
+        userEditedSlug = true;
+    });
 });
 </script>
 @endpush

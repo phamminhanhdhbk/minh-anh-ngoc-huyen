@@ -3,6 +3,56 @@
 @section('title', $post->title . ' - Blog')
 
 @section('content')
+<style>
+    .blog-post {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+    
+    .post-content {
+        max-width: 100%;
+        overflow-x: auto;
+    }
+    
+    .post-content img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 1rem 0;
+    }
+    
+    .post-content table {
+        max-width: 100%;
+        overflow-x: auto;
+    }
+    
+    .post-content p {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    
+    /* Ensure columns don't overflow */
+    .col-lg-8,
+    .col-lg-4 {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+    
+    /* Featured image wrapper */
+    .featured-image-wrapper {
+        width: 100%;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+    }
+    
+    .featured-image-wrapper img {
+        width: 100%;
+        height: auto;
+        max-height: 500px;
+        object-fit: cover;
+        display: block;
+    }
+</style>
 <div class="container py-5">
     <div class="row">
         <div class="col-lg-8">
@@ -18,8 +68,11 @@
                 </div>
 
                 <!-- Featured Image -->
-                @if($post->featured_image)
-                    <img src="{{ asset($post->featured_image) }}" alt="{{ $post->title }}" class="img-fluid mb-4 rounded shadow">
+                @if($post->featured_image && $post->featured_image_visible)
+                    <div class="featured-image-wrapper">
+                        <img src="{{ asset($post->featured_image) }}" alt="{{ $post->title }}" 
+                             class="rounded shadow">
+                    </div>
                 @endif
 
                 <!-- Excerpt -->
@@ -31,7 +84,7 @@
 
                 <!-- Content -->
                 <div class="post-content">
-                    {!! nl2br(e($post->content)) !!}
+                    {!! sanitizeHtml($post->content) !!}
                 </div>
 
                 <!-- Tags -->
@@ -66,7 +119,7 @@
                         @foreach($relatedPosts as $related)
                             <div class="col-md-6 mb-3">
                                 <div class="card">
-                                    @if($related->featured_image)
+                                    @if($related->featured_image && $related->featured_image_visible)
                                         <img src="{{ asset($related->featured_image) }}" class="card-img-top" alt="{{ $related->title }}" style="height: 150px; object-fit: cover;">
                                     @endif
                                     <div class="card-body">

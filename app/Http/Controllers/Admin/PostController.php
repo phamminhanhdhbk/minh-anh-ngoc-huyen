@@ -147,6 +147,7 @@ class PostController extends Controller
 
         $data = $request->all();
         $data['slug'] = $request->slug ?: Str::slug($request->title);
+        $data['featured_image_visible'] = $request->has('featured_image_visible') ? true : false;
 
         if ($request->status == 'published' && !$post->published_at && !$request->published_at) {
             $data['published_at'] = now();
@@ -174,7 +175,7 @@ class PostController extends Controller
         // Handle SEO data
         if ($request->has('meta_title')) {
             $post->seoData()->updateOrCreate(
-                ['seoable_id' => $post->id, 'seoable_type' => Post::class],
+                ['model_id' => $post->id, 'model_type' => Post::class],
                 [
                     'meta_title' => $request->meta_title,
                     'meta_description' => $request->meta_description,
@@ -203,5 +204,27 @@ class PostController extends Controller
 
         return redirect()->route('admin.posts.index')
             ->with('success', 'Bài viết đã được xóa thành công!');
+    }
+
+    /**
+     * Upload image for CKEditor
+     */
+    public function uploadImage(Request $request)
+    {
+        if ($request->hasFile('upload')) {
+            $file = $request->file('upload');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('posts', $fileName, 'public');
+            
+            return response()->json([
+                'uploaded' => true,
+                'url' => asset('storage/' . $path)
+            ]);
+        }
+
+        return response()->json([
+            'uploaded' => false,
+            'error' => 'No file uploaded'
+        ], 400);
     }
 }

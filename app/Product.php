@@ -3,11 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\HasSeoData;
 
 class Product extends Model
 {
-    use HasSeoData;
+    use HasSeoData, SoftDeletes;
 
     protected $fillable = [
         'name', 'slug', 'description', 'price', 'sale_price',

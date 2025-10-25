@@ -1,83 +1,45 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Console\Commands;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Illuminate\Console\Command;
 use App\SiteSetting;
-use Illuminate\Support\Facades\Storage;
 
-class SiteSettingController extends Controller
+class InitializeSettings extends Command
 {
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'settings:initialize';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Initialize default site settings';
+
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
     public function __construct()
     {
-        $this->middleware(['auth', 'admin']);
-    }
-
-    public function index()
-    {
-        $settings = SiteSetting::getAllGrouped();
-        return view('admin.settings.index', compact('settings'));
-    }
-
-    public function edit()
-    {
-        $settings = SiteSetting::getAllGrouped();
-        return view('admin.settings.edit', compact('settings'));
-    }
-
-    public function update(Request $request)
-    {
-        $request->validate([
-            'settings' => 'required|array',
-        ]);
-
-        foreach ($request->settings as $key => $value) {
-            $setting = SiteSetting::where('key', $key)->first();
-
-            if ($setting) {
-                // Handle file uploads for image type
-                if ($setting->type === 'image' && $request->hasFile("files.{$key}")) {
-                    // Delete old image
-                    if ($setting->value && Storage::disk('public')->exists($setting->value)) {
-                        Storage::disk('public')->delete($setting->value);
-                    }
-
-                    // Store new image
-                    $file = $request->file("files.{$key}");
-                    $path = $file->store('settings', 'public');
-                    $value = $path;
-                }
-
-                // Handle boolean values
-                if ($setting->type === 'boolean') {
-                    $value = $request->has("settings.{$key}") ? '1' : '0';
-                }
-
-                $setting->update(['value' => $value]);
-            }
-        }
-
-        // Clear cache
-        SiteSetting::clearCache();
-
-        return redirect()->route('admin.settings.index')
-            ->with('success', 'Cấu hình trang web đã được cập nhật thành công!');
-    }
-
-    public function reset()
-    {
-        $this->createDefaultSettings();
-
-        return redirect()->route('admin.settings.index')
-            ->with('success', 'Đã khôi phục cấu hình mặc định!');
+        parent::__construct();
     }
 
     /**
-     * Create default settings
+     * Execute the console command.
+     *
+     * @return int
      */
-    public function createDefaultSettings()
+    public function handle()
     {
+        $this->info('Initializing default site settings...');
+
         $defaultSettings = [
             // General
             [
@@ -228,8 +190,12 @@ class SiteSettingController extends Controller
                 ['key' => $setting['key']],
                 $setting
             );
+            $this->line('✓ ' . $setting['label']);
         }
 
         SiteSetting::clearCache();
+
+        $this->info('Settings initialized successfully!');
+        return 0;
     }
 }

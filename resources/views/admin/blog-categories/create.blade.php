@@ -102,39 +102,52 @@
 
 @push('scripts')
 <script>
-function previewImage(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            $('#preview').attr('src', e.target.result);
-            $('#imagePreview').show();
+$(document).ready(function() {
+    // Preview image
+    function previewImage(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#preview').attr('src', e.target.result);
+                $('#imagePreview').show();
+            }
+            reader.readAsDataURL(input.files[0]);
+
+            // Update label
+            var fileName = input.files[0].name;
+            $(input).next('.custom-file-label').html(fileName);
         }
-        reader.readAsDataURL(input.files[0]);
-
-        // Update label
-        var fileName = input.files[0].name;
-        $(input).next('.custom-file-label').html(fileName);
     }
-}
 
-// Auto-generate slug from name
-$('#name').on('input', function() {
-    if ($('#slug').val() === '') {
-        var slug = $(this).val()
-            .toLowerCase()
-            .replace(/á|à|ả|ã|ạ|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a')
-            .replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e')
-            .replace(/i|í|ì|ỉ|ĩ|ị/gi, 'i')
-            .replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, 'o')
-            .replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, 'u')
-            .replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y')
-            .replace(/đ/gi, 'd')
-            .replace(/[^a-z0-9\s-]/g, '')
-            .replace(/\s+/g, '-')
-            .replace(/-+/g, '-')
-            .replace(/^-|-$/g, '');
-        $('#slug').val(slug);
-    }
+    // Attach preview function to file input
+    window.previewImage = previewImage;
+
+    // Auto-generate slug from name
+    let userEditedSlug = false;
+
+    $('#name').on('input', function() {
+        if (!userEditedSlug) {
+            var slug = $(this).val()
+                .toLowerCase()
+                .replace(/á|à|ả|ã|ạ|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a')
+                .replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e')
+                .replace(/i|í|ì|ỉ|ĩ|ị/gi, 'i')
+                .replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, 'o')
+                .replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, 'u')
+                .replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y')
+                .replace(/đ/gi, 'd')
+                .replace(/[^a-z0-9\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .replace(/^-|-$/g, '');
+            $('#slug').val(slug);
+        }
+    });
+
+    // Track if user manually edits slug
+    $('#slug').on('input', function() {
+        userEditedSlug = true;
+    });
 });
 </script>
 @endpush

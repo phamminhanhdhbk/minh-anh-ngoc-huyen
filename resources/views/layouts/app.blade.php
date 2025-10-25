@@ -47,23 +47,27 @@
             padding: 80px 0;
         }
         .footer {
-            background-color: #2c3e50;
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
             color: white;
             padding: 40px 0;
         }
         .cart-badge {
             position: absolute;
-            top: -8px;
-            right: -8px;
-            background: #dc3545;
+            top: -12px;
+            right: -12px;
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
             color: white;
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            font-size: 12px;
+            min-width: 24px;
+            height: 24px;
+            font-size: 11px;
+            font-weight: bold;
             display: flex;
             align-items: center;
             justify-content: center;
+            border: 2px solid #27ae60;
+            box-shadow: 0 2px 8px rgba(220, 53, 69, 0.4);
+            padding: 0 2px;
         }
         .auth-card {
             max-width: 400px;
@@ -91,16 +95,165 @@
         .navbar .dropdown-toggle::after {
             margin-left: 0.5rem;
         }
+
+        /* Toast Notification Styles */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .toast-notification {
+            min-width: 350px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            animation: slideIn 0.3s ease-out forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+
+        .toast-notification.hide {
+            animation: slideOut 0.3s ease-out forwards;
+        }
+
+        /* Cart Button Styles */
+        .navbar .nav-link.cart-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block !important;
+            line-height: 1;
+            padding: 0.5rem 0.25rem !important;
+        }
+
+        .navbar .nav-link.cart-link:hover {
+            color: white !important;
+            transform: scale(1.15);
+        }
+
+        .navbar .nav-item.me-3 {
+            display: flex;
+            align-items: center;
+        }
+
+        @media (max-width: 991px) {
+            .navbar .nav-link.cart-link {
+                padding: 0.5rem 0.5rem !important;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .navbar .nav-link.cart-link {
+                padding: 0.5rem 0.25rem !important;
+            }
+
+            .cart-badge {
+                top: -10px;
+                right: -10px;
+                min-width: 22px;
+                height: 22px;
+                font-size: 10px;
+                border-width: 1.5px;
+            }
+
+            /* Mobile navbar spacing */
+            .navbar-nav {
+                gap: 0.5rem;
+            }
+
+            .navbar-nav .nav-item {
+                margin-right: 0 !important;
+            }
+
+            .navbar-nav .nav-item.me-2 {
+                margin-right: 0.5rem !important;
+            }
+
+            .navbar-collapse {
+                gap: 0.5rem;
+            }
+
+            .navbar form.d-flex {
+                margin-right: 0.5rem !important;
+                margin-bottom: 0.5rem;
+                width: 100%;
+            }
+
+            .navbar form.d-flex input {
+                font-size: 0.9rem;
+            }
+
+            .navbar form.d-flex button {
+                padding: 0.375rem 0.75rem;
+            }
+        }
+
+        .toast-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+        }
+
+        .toast-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border: none;
+        }
+
+        .toast-warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            border: none;
+        }
+
+        .toast-info {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            border: none;
+        }
+
+        .toast-notification .btn-close {
+            filter: brightness(0) invert(1);
+        }
+
+        .toast-icon {
+            font-size: 24px;
+            margin-right: 12px;
+        }
     </style>
 
     @stack('styles')
 </head>
 <body>
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
     <!-- Navigation -->
     @hasSection('navbar')
         @yield('navbar')
     @else
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
         <div class="container">
             <a class="navbar-brand" href="{{ route('home') }}">
                 @if(setting('site_logo'))
@@ -198,7 +351,7 @@
 
                 <!-- Search Form -->
                 @if(!Request::is('login') && !Request::is('register'))
-                <form class="d-flex me-3" method="GET" action="{{ route('products.index') }}">
+                <form class="d-flex me-2 me-md-3" method="GET" action="{{ route('products.index') }}">
                     <input class="form-control me-2" type="search" name="search" placeholder="Tìm kiếm..." value="{{ request('search') }}">
                     <button class="btn btn-outline-light" type="submit">
                         <i class="fas fa-search"></i>
@@ -224,9 +377,9 @@
                     @else
                         <!-- Cart -->
                         @if(!Request::is('login') && !Request::is('register'))
-                        <li class="nav-item me-3">
-                            <a href="{{ route('cart.index') }}" class="btn btn-outline-light position-relative">
-                                <i class="fas fa-shopping-cart"></i>
+                        <li class="nav-item me-2 me-md-0 d-flex align-items-center">
+                            <a href="{{ route('cart.index') }}" class="nav-link cart-link position-relative" title="Giỏ hàng" style="padding: 0.5rem 0 !important;">
+                                <i class="fas fa-shopping-cart fa-lg"></i>
                                 <span class="cart-badge cart-count" id="cart-count">0</span>
                             </a>
                         </li>
@@ -311,7 +464,7 @@
                 </div>
                 <div class="col-md-4">
                     <h5>Theo dõi chúng tôi</h5>
-                    <div class="d-flex gap-3">
+                    <div class="d-flex gap-3 align-items-center">
                         @if(setting('social_facebook'))
                         <a href="{{ setting('social_facebook') }}" class="text-white" target="_blank">
                             <i class="fab fa-facebook fa-2x"></i>
@@ -325,6 +478,16 @@
                         @if(setting('social_youtube'))
                         <a href="{{ setting('social_youtube') }}" class="text-white" target="_blank">
                             <i class="fab fa-youtube fa-2x"></i>
+                        </a>
+                        @endif
+                        @if(setting('social_tiktok'))
+                        <a href="{{ setting('social_tiktok') }}" class="text-white" target="_blank">
+                            <i class="fab fa-tiktok fa-2x"></i>
+                        </a>
+                        @endif
+                        @if(setting('social_zalo'))
+                        <a href="{{ setting('social_zalo') }}" target="_blank" title="Zalo" class="d-flex align-items-center">
+                            <img src="{{ asset('images/social-icons/zalo.png') }}" alt="Zalo" style="width: 40px; height: 40px;">
                         </a>
                         @endif
                     </div>
@@ -402,17 +565,59 @@
         }
 
         function showAlert(type, message) {
-            const alertHtml = `
-                <div class="alert alert-${type} alert-dismissible fade show position-fixed" style="top: 80px; right: 20px; z-index: 9999;" role="alert">
-                    ${message}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            showToast(type, message);
+        }
+
+        function showToast(type = 'info', message = '', title = '') {
+            const iconMap = {
+                'success': '<i class="fas fa-check-circle toast-icon"></i>',
+                'danger': '<i class="fas fa-exclamation-circle toast-icon"></i>',
+                'warning': '<i class="fas fa-exclamation-triangle toast-icon"></i>',
+                'info': '<i class="fas fa-info-circle toast-icon"></i>'
+            };
+
+            const typeMap = {
+                'success': 'success',
+                'danger': 'danger',
+                'error': 'danger',
+                'warning': 'warning',
+                'info': 'info'
+            };
+
+            const actualType = typeMap[type] || 'info';
+            const icon = iconMap[actualType];
+            const displayTitle = title || (actualType === 'success' ? 'Thành công' : actualType === 'danger' ? 'Lỗi' : actualType === 'warning' ? 'Cảnh báo' : 'Thông báo');
+
+            const toastHtml = `
+                <div class="toast-notification toast-${actualType} d-flex align-items-center" role="alert">
+                    <div class="p-3 d-flex align-items-center flex-grow-1">
+                        ${icon}
+                        <div>
+                            <div class="fw-bold">${displayTitle}</div>
+                            <div class="mt-1" style="font-size: 0.9rem;">${message}</div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-3" data-dismiss="toast"></button>
                 </div>
             `;
-            $('body').append(alertHtml);
 
-            setTimeout(function() {
-                $('.alert').alert('close');
-            }, 3000);
+            const container = document.getElementById('toastContainer');
+            const toastElement = document.createElement('div');
+            toastElement.innerHTML = toastHtml;
+            container.appendChild(toastElement);
+
+            const toast = toastElement.querySelector('.toast-notification');
+            const closeBtn = toast.querySelector('.btn-close');
+
+            closeBtn.addEventListener('click', function() {
+                toast.classList.add('hide');
+                setTimeout(() => toast.remove(), 300);
+            });
+
+            setTimeout(() => {
+                toast.classList.add('hide');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
         }
     </script>
 

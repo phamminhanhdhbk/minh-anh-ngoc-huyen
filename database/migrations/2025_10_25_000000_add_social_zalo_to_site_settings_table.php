@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBannersTable extends Migration
+class AddSocialZaloToSiteSettingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateBannersTable extends Migration
      */
     public function up()
     {
-        Schema::create('banners', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->string('image');
-            $table->boolean('is_active')->default(true);
-            $table->timestamps();
+        Schema::table('site_settings', function (Blueprint $table) {
+            $table->string('social_zalo')->nullable(); // Add Zalo field
         });
     }
 
@@ -29,6 +25,8 @@ class CreateBannersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('banners');
+        Schema::table('site_settings', function (Blueprint $table) {
+            $table->dropColumn('social_zalo');
+        });
     }
 }

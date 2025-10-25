@@ -11,11 +11,12 @@ class Post extends Model
 
     protected $fillable = [
         'blog_category_id', 'user_id', 'title', 'slug', 'excerpt', 'content',
-        'featured_image', 'status', 'featured', 'views', 'published_at'
+        'featured_image', 'featured_image_visible', 'status', 'featured', 'views', 'published_at'
     ];
 
     protected $casts = [
         'featured' => 'boolean',
+        'featured_image_visible' => 'boolean',
         'views' => 'integer',
         'published_at' => 'datetime'
     ];

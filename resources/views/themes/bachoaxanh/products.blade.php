@@ -382,7 +382,9 @@ $(document).ready(function() {
                     button.removeClass('btn-success').addClass('btn-secondary');
 
                     // Show toast notification
-                    alert('Đã thêm ' + productName + ' vào giỏ hàng!');
+                    if(typeof showToast === 'function') {
+                        showToast('success', 'Đã thêm ' + productName + ' vào giỏ hàng', 'Thành công');
+                    }
 
                     // Reset button after 2 seconds
                     setTimeout(function() {
@@ -393,7 +395,7 @@ $(document).ready(function() {
                 } else {
                     button.html(originalText);
                     button.prop('disabled', false);
-                    alert(response.message || 'Có lỗi xảy ra!');
+                    showToast('danger', response.message || 'Có lỗi xảy ra!', 'Lỗi');
                 }
             },
             error: function(xhr) {
@@ -401,10 +403,12 @@ $(document).ready(function() {
                 button.prop('disabled', false);
 
                 if(xhr.status === 401) {
-                    alert('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!');
-                    window.location.href = '{{ route("login") }}';
+                    showToast('warning', 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!', 'Cảnh báo');
+                    setTimeout(() => {
+                        window.location.href = '{{ route("login") }}';
+                    }, 1500);
                 } else {
-                    alert('Có lỗi xảy ra! Vui lòng thử lại.');
+                    showToast('danger', 'Có lỗi xảy ra! Vui lòng thử lại.', 'Lỗi');
                 }
             }
         });
@@ -439,7 +443,7 @@ $(document).ready(function() {
             </div>
             <div class="col-md-4">
                 <h5 class="fw-bold">Theo dõi chúng tôi</h5>
-                <div class="d-flex gap-3 mt-3">
+                <div class="d-flex gap-3 mt-3 align-items-center">
                     @if(setting('social_facebook'))
                     <a href="{{ setting('social_facebook') }}" class="text-white" target="_blank">
                         <i class="fab fa-facebook fa-2x"></i>
@@ -453,6 +457,16 @@ $(document).ready(function() {
                     @if(setting('social_youtube'))
                     <a href="{{ setting('social_youtube') }}" class="text-white" target="_blank">
                         <i class="fab fa-youtube fa-2x"></i>
+                    </a>
+                    @endif
+                    @if(setting('social_tiktok'))
+                    <a href="{{ setting('social_tiktok') }}" class="text-white" target="_blank">
+                        <i class="fab fa-tiktok fa-2x"></i>
+                    </a>
+                    @endif
+                    @if(setting('social_zalo'))
+                    <a href="{{ setting('social_zalo') }}" target="_blank" title="Zalo" class="d-flex align-items-center">
+                        <img src="{{ asset('images/social-icons/zalo.png') }}" alt="Zalo" style="width: 40px; height: 40px;">
                     </a>
                     @endif
                 </div>

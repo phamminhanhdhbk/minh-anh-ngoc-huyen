@@ -106,6 +106,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::delete('reviews/{review}', 'Admin\ReviewController@destroy')->name('reviews.destroy');
 
     // Blog Management
+    Route::post('posts/upload-image', 'Admin\PostController@uploadImage')->name('posts.upload-image');
     Route::resource('blog-categories', 'Admin\BlogCategoryController');
     Route::resource('posts', 'Admin\PostController');
     Route::resource('post-tags', 'Admin\PostTagController');
