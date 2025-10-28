@@ -28,7 +28,7 @@
                     <div class="col-md-6 mb-4">
                         <div class="card h-100 shadow-sm">
                             @if($post->featured_image && $post->featured_image_visible)
-                                <img src="{{ asset($post->featured_image) }}" class="card-img-top" alt="{{ $post->title }}" style="height: 200px; object-fit: cover;">
+                                <img src="{{ asset('storage/' . $post->featured_image) }}" class="card-img-top" alt="{{ $post->title }}" style="height: 200px; object-fit: cover;">
                             @else
                                 <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
                                     <i class="fas fa-image fa-3x text-muted"></i>
@@ -132,7 +132,7 @@
                                 <a href="{{ route('blog.show', $featured->slug) }}" class="list-group-item list-group-item-action">
                                     <div class="d-flex">
                                         @if($featured->featured_image && $featured->featured_image_visible)
-                                            <img src="{{ asset($featured->featured_image) }}" alt="{{ $featured->title }}"
+                                            <img src="{{ asset('storage/' . $featured->featured_image) }}" alt="{{ $featured->title }}"
                                                  class="mr-3" style="width: 60px; height: 60px; object-fit: cover;">
                                         @endif
                                         <div>

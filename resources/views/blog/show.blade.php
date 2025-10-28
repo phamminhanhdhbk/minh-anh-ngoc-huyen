@@ -70,7 +70,7 @@
                 <!-- Featured Image -->
                 @if($post->featured_image && $post->featured_image_visible)
                     <div class="featured-image-wrapper">
-                        <img src="{{ asset($post->featured_image) }}" alt="{{ $post->title }}" 
+                        <img src="{{ asset('storage/' . $post->featured_image) }}" alt="{{ $post->title }}" 
                              class="rounded shadow">
                     </div>
                 @endif
@@ -120,7 +120,7 @@
                             <div class="col-md-6 mb-3">
                                 <div class="card">
                                     @if($related->featured_image && $related->featured_image_visible)
-                                        <img src="{{ asset($related->featured_image) }}" class="card-img-top" alt="{{ $related->title }}" style="height: 150px; object-fit: cover;">
+                                        <img src="{{ asset('storage/' . $related->featured_image) }}" class="card-img-top" alt="{{ $related->title }}" style="height: 150px; object-fit: cover;">
                                     @endif
                                     <div class="card-body">
                                         <h6 class="card-title">
