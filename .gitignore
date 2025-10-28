@@ -1,14 +1,66 @@
+# Environment & Configuration
 .env
 .env.backup
-.phpunit.result.cache
-Homestead.json
-Homestead.yaml
+.env.local
+.env.*.local
+
+# IDE & Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Dependencies
+/node_modules
+/vendor
+composer.phar
+composer.lock
+package-lock.json
+yarn.lock
+
+# Build & Compiled Files
+/public/hot
+/public/storage
+/public/mix-manifest.json
+/public/js/app.js
+/public/css/app.css
 npm-debug.log
 yarn-error.log
-# Additional folders to ignore
-/public/uploads
-/storage/logs
-/storage/framework/cache
-/storage/framework/sessions
-/storage/framework/views
-public/storage
+
+# Storage & Uploads
+/storage/*.key
+/storage/app/public/*
+!/storage/app/public/.gitignore
+/storage/framework/cache/*
+!/storage/framework/cache/.gitignore
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+/storage/logs/*
+!/storage/logs/.gitignore
+/public/uploads/*
+!/public/uploads/.gitignore
+
+# Testing
+.phpunit.result.cache
+/coverage
+/.phpunit.cache
+
+# Deployment
+Homestead.json
+Homestead.yaml
+auth.json
+.vagrant/
+.php_cs.cache
+.php-cs-fixer.cache
+
+# User specific
+.user.ini
+*.log
+*.sql
+*.sqlite
+*.db
