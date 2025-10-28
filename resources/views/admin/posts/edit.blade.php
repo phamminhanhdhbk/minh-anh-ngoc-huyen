@@ -164,7 +164,7 @@
                     <div class="card-body">
                         @if($post->featured_image)
                             <div class="mb-3 d-flex align-items-center justify-content-between">
-                                <img src="{{ asset($post->featured_image) }}" alt="{{ $post->title }}" class="img-thumbnail" style="max-width: 200px;">
+                                <img src="{{ asset('storage/' . $post->featured_image) }}" alt="{{ $post->title }}" class="img-thumbnail" style="max-width: 200px;">
                                 <div class="form-check form-switch">
                                     <input class="form-check-input" type="checkbox" id="featured_image_visible" 
                                            name="featured_image_visible" value="1" 

@@ -138,7 +138,7 @@
                                 <td>{{ $post->id }}</td>
                                 <td>
                                     @if($post->featured_image)
-                                        <img src="{{ asset($post->featured_image) }}" alt="{{ $post->title }}" class="img-thumbnail" style="width: 80px; height: 60px; object-fit: cover;">
+                                        <img src="{{ asset('storage/' . $post->featured_image) }}" alt="{{ $post->title }}" class="img-thumbnail" style="width: 80px; height: 60px; object-fit: cover;">
                                     @else
                                         <div class="bg-light d-flex align-items-center justify-content-center" style="width: 80px; height: 60px;">
                                             <i class="fas fa-image text-muted"></i>

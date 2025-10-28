@@ -8,6 +8,7 @@ use App\Post;
 use App\BlogCategory;
 use App\PostTag;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -89,8 +90,8 @@ class PostController extends Controller
         if ($request->hasFile('featured_image')) {
             $image = $request->file('featured_image');
             $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('uploads/posts'), $imageName);
-            $data['featured_image'] = 'uploads/posts/' . $imageName;
+            $path = $image->storeAs('public/posts', $imageName);
+            $data['featured_image'] = 'posts/' . $imageName;
         }
 
         $post = Post::create($data);
@@ -155,14 +156,19 @@ class PostController extends Controller
 
         if ($request->hasFile('featured_image')) {
             // Delete old image
-            if ($post->featured_image && file_exists(public_path($post->featured_image))) {
-                unlink(public_path($post->featured_image));
+            if ($post->featured_image) {
+                // Try both old path (uploads/posts) and new path (storage)
+                if (file_exists(public_path($post->featured_image))) {
+                    unlink(public_path($post->featured_image));
+                } elseif (Storage::exists('public/' . $post->featured_image)) {
+                    Storage::delete('public/' . $post->featured_image);
+                }
             }
 
             $image = $request->file('featured_image');
             $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('uploads/posts'), $imageName);
-            $data['featured_image'] = 'uploads/posts/' . $imageName;
+            $path = $image->storeAs('public/posts', $imageName);
+            $data['featured_image'] = 'posts/' . $imageName;
         }
 
         $post->update($data);
@@ -196,8 +202,13 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
 
         // Delete featured image
-        if ($post->featured_image && file_exists(public_path($post->featured_image))) {
-            unlink(public_path($post->featured_image));
+        if ($post->featured_image) {
+            // Try both old path (uploads/posts) and new path (storage)
+            if (file_exists(public_path($post->featured_image))) {
+                unlink(public_path($post->featured_image));
+            } elseif (Storage::exists('public/' . $post->featured_image)) {
+                Storage::delete('public/' . $post->featured_image);
+            }
         }
 
         $post->delete();
