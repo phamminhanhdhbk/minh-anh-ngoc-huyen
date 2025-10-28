@@ -235,6 +235,24 @@
 
         .toast-notification .btn-close {
             filter: brightness(0) invert(1);
+            cursor: pointer;
+            opacity: 0.8;
+            z-index: 10;
+            position: relative;
+            pointer-events: auto !important;
+            flex-shrink: 0;
+            width: 1em;
+            height: 1em;
+            padding: 0.25em;
+        }
+
+        .toast-notification .btn-close:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .toast-notification .btn-close:active {
+            transform: scale(0.95);
         }
 
         .toast-icon {
@@ -589,34 +607,61 @@
             const displayTitle = title || (actualType === 'success' ? 'Thành công' : actualType === 'danger' ? 'Lỗi' : actualType === 'warning' ? 'Cảnh báo' : 'Thông báo');
 
             const toastHtml = `
-                <div class="toast-notification toast-${actualType} d-flex align-items-center" role="alert">
-                    <div class="p-3 d-flex align-items-center flex-grow-1">
-                        ${icon}
-                        <div>
-                            <div class="fw-bold">${displayTitle}</div>
-                            <div class="mt-1" style="font-size: 0.9rem;">${message}</div>
+                <div class="toast-notification toast-${actualType}" role="alert">
+                    <div class="d-flex align-items-center">
+                        <div class="p-3 d-flex align-items-center flex-grow-1">
+                            ${icon}
+                            <div>
+                                <div class="fw-bold">${displayTitle}</div>
+                                <div class="mt-1" style="font-size: 0.9rem;">${message}</div>
+                            </div>
                         </div>
+                        <button type="button" class="btn-close btn-close-white me-3 ms-auto" aria-label="Close"></button>
                     </div>
-                    <button type="button" class="btn-close btn-close-white me-3" data-dismiss="toast"></button>
                 </div>
             `;
 
             const container = document.getElementById('toastContainer');
             const toastElement = document.createElement('div');
             toastElement.innerHTML = toastHtml;
-            container.appendChild(toastElement);
+            const toast = toastElement.firstElementChild;
+            container.appendChild(toast);
 
-            const toast = toastElement.querySelector('.toast-notification');
             const closeBtn = toast.querySelector('.btn-close');
+            console.log('Toast created, close button found:', closeBtn); // Debug
 
-            closeBtn.addEventListener('click', function() {
-                toast.classList.add('hide');
-                setTimeout(() => toast.remove(), 300);
-            });
+            // Close button event
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function(e) {
+                    console.log('Close button clicked!'); // Debug
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toast.classList.add('hide');
+                    setTimeout(() => {
+                        if (toast.parentNode) {
+                            toast.remove();
+                            console.log('Toast removed'); // Debug
+                        }
+                    }, 300);
+                });
+                
+                // Also add direct onclick for testing
+                closeBtn.style.pointerEvents = 'auto';
+                console.log('Event listener attached'); // Debug
+            } else {
+                console.error('Close button not found!'); // Debug
+            }
 
+            // Auto close after 4 seconds
             setTimeout(() => {
-                toast.classList.add('hide');
-                setTimeout(() => toast.remove(), 300);
+                if (toast.parentNode) {
+                    toast.classList.add('hide');
+                    setTimeout(() => {
+                        if (toast.parentNode) {
+                            toast.remove();
+                        }
+                    }, 300);
+                }
             }, 4000);
         }
     </script>
