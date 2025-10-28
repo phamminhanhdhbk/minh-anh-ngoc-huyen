@@ -34,10 +34,24 @@
                                         <tr id="cart-item-{{ $item->id }}">
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <img src="{{ $item->product->image ?? 'https://via.placeholder.com/60x60' }}"
+                                                    @php
+                                                        $imageUrl = 'https://via.placeholder.com/60x60?text=No+Image';
+                                                        
+                                                        // Ưu tiên: images relationship > featured_image > image field
+                                                        if($item->product->images && $item->product->images->count() > 0) {
+                                                            $imageUrl = asset('storage/' . $item->product->images->first()->image_path);
+                                                        } elseif($item->product->featured_image) {
+                                                            $imageUrl = asset('storage/' . $item->product->featured_image);
+                                                        } elseif($item->product->image && !str_contains($item->product->image, 'placeholder')) {
+                                                            $imageUrl = $item->product->image;
+                                                        }
+                                                    @endphp
+                                                    
+                                                    <img src="{{ $imageUrl }}"
                                                          alt="{{ $item->product->name }}"
                                                          class="rounded me-3"
-                                                         style="width: 60px; height: 60px; object-fit: cover;">
+                                                         style="width: 60px; height: 60px; object-fit: cover;"
+                                                         onerror="this.src='https://via.placeholder.com/60x60?text=No+Image'">
                                                     <div>
                                                         <h6 class="mb-1">{{ $item->product->name }}</h6>
                                                         <small class="text-muted">{{ $item->product->category->name }}</small>

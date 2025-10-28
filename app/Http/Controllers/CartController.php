@@ -12,7 +12,9 @@ class CartController extends Controller
     public function index()
     {
         $sessionId = session()->getId();
-        $cartItems = Cart::where('session_id', $sessionId)->with('product.category')->get();
+        $cartItems = Cart::where('session_id', $sessionId)
+                        ->with(['product.category', 'product.images'])
+                        ->get();
 
         $total = $cartItems->sum(function ($item) {
             return $item->product->price * $item->quantity;

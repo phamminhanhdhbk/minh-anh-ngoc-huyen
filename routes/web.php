@@ -98,6 +98,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::put('settings', 'Admin\SiteSettingController@update')->name('settings.update');
     Route::post('settings/reset', 'Admin\SiteSettingController@reset')->name('settings.reset');
 
+    // Notification Emails
+    Route::resource('notification-emails', 'Admin\NotificationEmailController');
+    Route::post('notification-emails/{notificationEmail}/toggle', 'Admin\NotificationEmailController@toggleStatus')->name('notification-emails.toggle');
+
     // Reviews Management
     Route::get('reviews', 'Admin\ReviewController@index')->name('reviews.index');
     Route::get('reviews/{review}', 'Admin\ReviewController@show')->name('reviews.show');

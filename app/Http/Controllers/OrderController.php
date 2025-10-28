@@ -96,8 +96,14 @@ class OrderController extends Controller
 
             // Send email notification to admin emails
             try {
-                $emailList = SiteSetting::get('order_notification_emails', 'minhanh.itqn@gmail.com,ngochuyen2410@gmail.com');
-                $emails = array_map('trim', explode(',', $emailList));
+                // Lấy danh sách email từ bảng notification_emails
+                $emails = \App\NotificationEmail::getActiveEmails('order');
+                
+                // Nếu không có email nào trong notification_emails, dùng fallback từ SiteSetting
+                if (empty($emails)) {
+                    $emailList = SiteSetting::get('order_notification_emails', 'minhanh.itqn@gmail.com,ngochuyen2410@gmail.com');
+                    $emails = array_map('trim', explode(',', $emailList));
+                }
                 
                 foreach ($emails as $email) {
                     if (filter_var($email, FILTER_VALIDATE_EMAIL)) {

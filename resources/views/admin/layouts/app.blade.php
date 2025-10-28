@@ -250,6 +250,13 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.notification-emails.*') ? 'active' : '' }}"
+                       href="{{ route('admin.notification-emails.index') }}">
+                        <i class="fas fa-envelope me-2"></i>Quản Lý Email Thông Báo
+                    </a>
+                </li>
+
                 <hr class="my-3" style="border-color: rgba(255,255,255,0.2);">
 
                 <li class="nav-item">
