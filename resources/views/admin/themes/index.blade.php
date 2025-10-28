@@ -60,7 +60,7 @@
                             @if($theme->is_active)
                                 <span class="badge badge-success">Đang dùng</span>
                             @elseif($theme->is_default)
-                                <span class="badge badge-info">Mặc định</span>
+                                <span class="badge badge-primary">Mặc định</span>
                             @endif
                         </div>
 

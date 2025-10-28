@@ -262,9 +262,9 @@
                                 @if($theme->is_active)
                                     <span class="badge badge-success">Đang dùng</span>
                                 @elseif($theme->is_default)
-                                    <span class="badge badge-info">Mặc định</span>
+                                    <span class="badge badge-primary">Mặc định</span>
                                 @else
-                                    <span class="badge badge-secondary">Không dùng</span>
+                                    <span class="badge badge-dark">Không dùng</span>
                                 @endif
                             </td>
                         </tr>

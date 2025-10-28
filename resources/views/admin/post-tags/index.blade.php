@@ -44,7 +44,7 @@
                                 <td><strong>{{ $tag->name }}</strong></td>
                                 <td><code>{{ $tag->slug }}</code></td>
                                 <td class="text-center">
-                                    <span class="badge badge-info">{{ $tag->posts_count }} bài</span>
+                                    <span class="badge badge-primary" style="background-color: #007bff !important; color: white !important;">{{ $tag->posts_count }} bài</span>
                                 </td>
                                 <td>
                                     <a href="{{ route('admin.post-tags.edit', $tag->id) }}" class="btn btn-sm btn-info">

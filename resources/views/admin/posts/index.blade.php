@@ -157,15 +157,15 @@
                                 <td>{{ $post->category->name ?? 'N/A' }}</td>
                                 <td>{{ $post->author->name ?? 'N/A' }}</td>
                                 <td class="text-center">
-                                    <span class="badge badge-info">{{ $post->views }}</span>
+                                    <span class="badge badge-primary" style="background-color: #007bff !important; color: white !important;">{{ $post->views }}</span>
                                 </td>
                                 <td>
                                     @if($post->status == 'published')
-                                        <span class="badge badge-success">Đã xuất bản</span>
+                                        <span class="badge badge-success" style="background-color: #28a745 !important; color: white !important;">Đã xuất bản</span>
                                     @elseif($post->status == 'draft')
-                                        <span class="badge badge-warning">Bản nháp</span>
+                                        <span class="badge badge-warning" style="background-color: #ffc107 !important; color: black !important;">Bản nháp</span>
                                     @else
-                                        <span class="badge badge-secondary">Lưu trữ</span>
+                                        <span class="badge badge-danger" style="background-color: #dc3545 !important; color: white !important;">Lưu trữ</span>
                                     @endif
                                 </td>
                                 <td>

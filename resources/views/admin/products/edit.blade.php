@@ -76,13 +76,12 @@
                         <div class="col-md-6 mb-3">
                             <label for="price" class="form-label">Giá gốc <span class="text-danger">*</span></label>
                             <div class="input-group">
-                                <input type="text" class="form-control @error('price') is-invalid @enderror price-input"
-                                       id="price" name="price_display" value="{{ old('price', $product->price) }}"
+                                <input type="text" class="form-control @error('price') is-invalid @enderror"
+                                       id="price" name="price" value="{{ old('price', number_format($product->price, 0, '', '.')) }}"
                                        placeholder="0" required>
                                 <span class="input-group-text">₫</span>
                             </div>
-                            <input type="hidden" id="price_hidden" name="price" value="{{ old('price', $product->price) }}">
-                            <div class="price-text mt-2" style="font-size: 0.9rem; color: #666;"></div>
+                            <small class="text-muted">VD: 24.900.000</small>
                             @error('price')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -91,13 +90,12 @@
                         <div class="col-md-6 mb-3">
                             <label for="sale_price" class="form-label">Giá khuyến mãi</label>
                             <div class="input-group">
-                                <input type="text" class="form-control @error('sale_price') is-invalid @enderror price-input"
-                                       id="sale_price" name="sale_price_display" value="{{ old('sale_price', $product->sale_price) }}"
+                                <input type="text" class="form-control @error('sale_price') is-invalid @enderror"
+                                       id="sale_price" name="sale_price" value="{{ old('sale_price', $product->sale_price ? number_format($product->sale_price, 0, '', '.') : '') }}"
                                        placeholder="0">
                                 <span class="input-group-text">₫</span>
                             </div>
-                            <input type="hidden" id="sale_price_hidden" name="sale_price" value="{{ old('sale_price', $product->sale_price) }}">
-                            <div class="price-text mt-2" style="font-size: 0.9rem; color: #666;"></div>
+                            <small class="text-muted">VD: 22.900.000</small>
                             @error('sale_price')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -483,7 +481,10 @@ $(document).ready(function() {
             let value = $(this).val();
             // Remove all non-digit characters
             let cleanValue = value.replace(/\D/g, '');
-            $(this).val(cleanValue);
+            // Only update if value changed
+            if (cleanValue !== value.replace(/\D/g, '')) {
+                $(this).val(cleanValue);
+            }
         });
         
         // Format when pressing enter

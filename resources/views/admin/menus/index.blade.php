@@ -50,13 +50,13 @@
                                 <td><code>{{ $menu->slug }}</code></td>
                                 <td>
                                     @if($menu->location)
-                                        <span class="badge badge-info">{{ $menu->location }}</span>
+                                        <span class="badge badge-primary">{{ $menu->location }}</span>
                                     @else
                                         <span class="text-muted">-</span>
                                     @endif
                                 </td>
                                 <td>
-                                    <span class="badge badge-secondary">{{ $menu->all_items_count }} mục</span>
+                                    <span class="badge badge-primary">{{ $menu->all_items_count }} mục</span>
                                 </td>
                                 <td>{{ $menu->order }}</td>
                                 <td>

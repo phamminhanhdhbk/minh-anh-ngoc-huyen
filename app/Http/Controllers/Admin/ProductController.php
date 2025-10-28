@@ -58,6 +58,12 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+        // Clean price values BEFORE validation - remove all non-digit characters
+        $request->merge([
+            'price' => preg_replace('/\D/', '', $request->price),
+            'sale_price' => $request->sale_price ? preg_replace('/\D/', '', $request->sale_price) : null,
+        ]);
+
         $request->validate([
             'name' => 'required|string|max:255|unique:products,name',
             'description' => 'nullable|string',
@@ -115,6 +121,12 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
+        // Clean price values BEFORE validation - remove all non-digit characters
+        $request->merge([
+            'price' => preg_replace('/\D/', '', $request->price),
+            'sale_price' => $request->sale_price ? preg_replace('/\D/', '', $request->sale_price) : null,
+        ]);
+
         $request->validate([
             'name' => 'required|string|max:255|unique:products,name,' . $product->id,
             'description' => 'nullable|string',

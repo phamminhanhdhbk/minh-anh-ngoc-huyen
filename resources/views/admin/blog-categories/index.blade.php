@@ -61,14 +61,14 @@
                                 </td>
                                 <td><code>{{ $category->slug }}</code></td>
                                 <td class="text-center">
-                                    <span class="badge badge-info">{{ $category->posts_count ?? 0 }} bài</span>
+                                    <span class="badge badge-primary" style="background-color: #007bff !important; color: white !important;">{{ $category->posts_count ?? 0 }} bài</span>
                                 </td>
                                 <td class="text-center">{{ $category->order }}</td>
                                 <td>
                                     @if($category->status)
-                                        <span class="badge badge-success">Hiển thị</span>
+                                        <span class="badge badge-success" style="background-color: #28a745 !important; color: white !important;">Hiển thị</span>
                                     @else
-                                        <span class="badge badge-secondary">Ẩn</span>
+                                        <span class="badge badge-danger" style="background-color: #dc3545 !important; color: white !important;">Ẩn</span>
                                     @endif
                                 </td>
                                 <td>
