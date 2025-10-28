@@ -91,6 +91,16 @@
 
             <!-- Right Side -->
             <ul class="navbar-nav">
+                <!-- Cart Icon - Always visible -->
+                <li class="nav-item me-2">
+                    <a href="{{ route('cart.index') }}" class="btn btn-light position-relative">
+                        <i class="fas fa-shopping-cart text-success"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-count">
+                            {{ \App\Cart::where('session_id', session()->getId())->sum('quantity') }}
+                        </span>
+                    </a>
+                </li>
+
                 @guest
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('login') }}">
@@ -98,14 +108,6 @@
                         </a>
                     </li>
                 @else
-                    <li class="nav-item me-2">
-                        <a href="{{ route('cart.index') }}" class="btn btn-light position-relative">
-                            <i class="fas fa-shopping-cart text-success"></i>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-count">
-                                {{ \App\Cart::where('session_id', session()->getId())->sum('quantity') }}
-                            </span>
-                        </a>
-                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                             <i class="fas fa-user me-1"></i>{{ Auth::user()->name }}

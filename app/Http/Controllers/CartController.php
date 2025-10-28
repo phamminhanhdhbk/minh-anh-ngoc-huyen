@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Cart;
 use App\Product;
+use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
 {
@@ -29,6 +30,21 @@ class CartController extends Controller
 
         $product = Product::find($request->product_id);
         $sessionId = session()->getId();
+        
+        // Debug logging
+        Log::info('Cart Add Request', [
+            'product_id' => $request->product_id,
+            'quantity' => $request->quantity,
+            'session_id' => $sessionId,
+            'has_session' => !empty($sessionId)
+        ]);
+
+        // Ensure session is started
+        if (empty($sessionId)) {
+            session()->start();
+            $sessionId = session()->getId();
+            Log::info('Session started', ['new_session_id' => $sessionId]);
+        }
 
         // Check if product already in cart
         $cartItem = Cart::where('session_id', $sessionId)
@@ -38,17 +54,20 @@ class CartController extends Controller
         if ($cartItem) {
             $cartItem->quantity += $request->quantity;
             $cartItem->save();
+            Log::info('Cart updated', ['cart_item_id' => $cartItem->id, 'new_quantity' => $cartItem->quantity]);
         } else {
-            Cart::create([
+            $newCart = Cart::create([
                 'session_id' => $sessionId,
                 'product_id' => $product->id,
                 'quantity' => $request->quantity,
-                'price' => $product->sale_price
+                'price' => $product->sale_price ?? $product->price
             ]);
+            Log::info('Cart created', ['cart_item_id' => $newCart->id]);
         }
 
         // Get total cart count
         $cartCount = Cart::where('session_id', $sessionId)->sum('quantity');
+        Log::info('Cart count', ['count' => $cartCount]);
 
         return response()->json([
             'success' => true,
