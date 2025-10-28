@@ -6,8 +6,11 @@ use Illuminate\Http\Request;
 use App\Cart;
 use App\Order;
 use App\OrderItem;
+use App\SiteSetting;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderPlaced;
 
 class OrderController extends Controller
 {
@@ -90,6 +93,25 @@ class OrderController extends Controller
             Cart::where('session_id', $sessionId)->delete();
 
             DB::commit();
+
+            // Send email notification to admin emails
+            try {
+                $emailList = SiteSetting::get('order_notification_emails', 'minhanh.itqn@gmail.com,ngochuyen2410@gmail.com');
+                $emails = array_map('trim', explode(',', $emailList));
+                
+                foreach ($emails as $email) {
+                    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                        Mail::to($email)->send(new OrderPlaced($order));
+                        Log::info('Order notification email sent', ['email' => $email, 'order_id' => $order->id]);
+                    }
+                }
+            } catch (\Exception $e) {
+                // Log email error but don't fail the order
+                Log::error('Failed to send order notification email', [
+                    'error' => $e->getMessage(),
+                    'order_id' => $order->id
+                ]);
+            }
 
             return redirect()->route('order.success', $order->id)->with('success', 'Đặt hàng thành công!');
 

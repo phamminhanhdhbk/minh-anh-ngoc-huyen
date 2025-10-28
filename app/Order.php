@@ -28,6 +28,12 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    // Alias for easier access
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
     public static function generateOrderNumber()
     {
         return 'ORD-' . date('Ymd') . '-' . str_pad(static::whereDate('created_at', today())->count() + 1, 4, '0', STR_PAD_LEFT);

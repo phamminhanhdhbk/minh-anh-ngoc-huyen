@@ -243,7 +243,8 @@ function getGroupIcon($group) {
         'general' => 'home',
         'contact' => 'phone',
         'social' => 'share-alt',
-        'business' => 'business-time'
+        'business' => 'business-time',
+        'order' => 'shopping-cart'
     ];
     return $icons[$group] ?? 'cog';
 }
@@ -253,7 +254,8 @@ function getGroupName($group) {
         'general' => 'Thông tin chung',
         'contact' => 'Thông tin liên hệ',
         'social' => 'Mạng xã hội',
-        'business' => 'Kinh doanh'
+        'business' => 'Kinh doanh',
+        'order' => 'Đơn hàng'
     ];
     return $names[$group] ?? ucfirst($group);
 }
