@@ -52,6 +52,11 @@ class SiteSettingController extends Controller
                 // Handle boolean values
                 if ($setting->type === 'boolean') {
                     $value = $request->has("settings.{$key}") ? '1' : '0';
+                } else {
+                    // Trim string values to avoid stray whitespace/newlines
+                    if (is_string($value)) {
+                        $value = trim($value);
+                    }
                 }
 
                 $setting->update(['value' => $value]);
@@ -82,7 +87,7 @@ class SiteSettingController extends Controller
             // General
             [
                 'key' => 'site_name',
-                'value' => 'Shop VO',
+                'value' => 'VietNhat123',
                 'type' => 'text',
                 'group' => 'general',
                 'label' => 'Tên trang web',
@@ -111,7 +116,7 @@ class SiteSettingController extends Controller
             // Contact
             [
                 'key' => 'contact_phone',
-                'value' => '0123 456 789',
+                'value' => '(+84) 905 817 014',
                 'type' => 'text',
                 'group' => 'contact',
                 'label' => 'Số điện thoại',
@@ -120,7 +125,7 @@ class SiteSettingController extends Controller
             ],
             [
                 'key' => 'contact_email',
-                'value' => 'info@shopvo.com',
+                'value' => 'minhanh.itqn@gmail.com',
                 'type' => 'email',
                 'group' => 'contact',
                 'label' => 'Email liên hệ',
@@ -129,7 +134,7 @@ class SiteSettingController extends Controller
             ],
             [
                 'key' => 'contact_address',
-                'value' => '123 Đường ABC, Quận 1, TP.HCM',
+                'value' => 'Số 159, Đường 30/4, Phường Hòa Cường Bắc, Quận Hải Châu, Đà Nẵng ',
                 'type' => 'textarea',
                 'group' => 'contact',
                 'label' => 'Địa chỉ',
@@ -205,12 +210,22 @@ class SiteSettingController extends Controller
             ],
             [
                 'key' => 'free_shipping_amount',
-                'value' => '500000',
+                // Default: miễn phí vận chuyển cho đơn hàng từ 2,000,000 VND
+                'value' => '2000000',
                 'type' => 'number',
                 'group' => 'business',
                 'label' => 'Miễn phí ship từ',
                 'description' => 'Số tiền tối thiểu để miễn phí vận chuyển (VND)',
                 'sort_order' => 2
+            ],
+            [
+                'key' => 'shipping_fee',
+                'value' => '100000',
+                'type' => 'number',
+                'group' => 'business',
+                'label' => 'Phí vận chuyển cố định',
+                'description' => 'Phí vận chuyển mặc định (VND) áp dụng khi không đạt ngưỡng miễn phí',
+                'sort_order' => 3
             ],
             [
                 'key' => 'enable_reviews',
@@ -219,11 +234,16 @@ class SiteSettingController extends Controller
                 'group' => 'business',
                 'label' => 'Cho phép đánh giá',
                 'description' => 'Cho phép khách hàng đánh giá sản phẩm',
-                'sort_order' => 3
+                'sort_order' => 4
             ]
         ];
 
         foreach ($defaultSettings as $setting) {
+            // Ensure default value doesn't contain stray whitespace/newlines
+            if (isset($setting['value']) && is_string($setting['value'])) {
+                $setting['value'] = trim($setting['value']);
+            }
+
             SiteSetting::updateOrCreate(
                 ['key' => $setting['key']],
                 $setting

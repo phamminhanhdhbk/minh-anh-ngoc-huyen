@@ -51,7 +51,11 @@ class OrderController extends Controller
                 return $item->quantity * ($item->product->sale_price ?: $item->product->price);
             });
 
-            $shipping = 30000; // 30k shipping fee
+            // Use configurable shipping settings
+            $freeThreshold = (int) setting('free_shipping_amount', 2000000);
+            $defaultShipping = (int) setting('shipping_fee', 30000);
+
+            $shipping = ($subtotal >= $freeThreshold) ? 0 : $defaultShipping;
             $tax = 0;
             $total = $subtotal + $shipping + $tax;
 
@@ -101,7 +105,7 @@ class OrderController extends Controller
                 
                 // Nếu không có email nào trong notification_emails, dùng fallback từ SiteSetting
                 if (empty($emails)) {
-                    $emailList = SiteSetting::get('order_notification_emails', 'minhanh.itqn@gmail.com,ngochuyen2410@gmail.com');
+                    $emailList = SiteSetting::get('order_notification_emails', 'minhanh.itqn@gmail.com');
                     $emails = array_map('trim', explode(',', $emailList));
                 }
                 

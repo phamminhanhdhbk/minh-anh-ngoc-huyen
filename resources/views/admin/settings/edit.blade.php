@@ -89,13 +89,23 @@
                                     @endif
                                 </label>
 
-                                @if($setting->type === 'text')
-                                <input type="text"
-                                       class="form-control @error('settings.'.$setting->key) is-invalid @enderror"
-                                       id="setting_{{ $setting->key }}"
-                                       name="settings[{{ $setting->key }}]"
-                                       value="{{ old('settings.'.$setting->key, $setting->value) }}"
-                                       placeholder="Nhập {{ strtolower($setting->label) }}">
+                    @if($setting->type === 'text')
+                    <input type="text"
+                        class="form-control @error('settings.'.$setting->key) is-invalid @enderror"
+                        id="setting_{{ $setting->key }}"
+                        name="settings[{{ $setting->key }}]"
+                        value="{{ old('settings.'.$setting->key, $setting->value) }}"
+                        placeholder="Nhập {{ strtolower($setting->label) }}">
+
+                    @elseif($setting->type === 'number')
+                    <input type="number"
+                        class="form-control @error('settings.'.$setting->key) is-invalid @enderror"
+                        id="setting_{{ $setting->key }}"
+                        name="settings[{{ $setting->key }}]"
+                        value="{{ old('settings.'.$setting->key, $setting->value) }}"
+                        min="0"
+                        step="1"
+                        placeholder="Nhập {{ strtolower($setting->label) }}">
 
                                 @elseif($setting->type === 'textarea')
                                 <textarea class="form-control @error('settings.'.$setting->key) is-invalid @enderror"

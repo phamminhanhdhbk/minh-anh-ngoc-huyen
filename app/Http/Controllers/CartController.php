@@ -132,7 +132,12 @@ class CartController extends Controller
             return ($item->product->sale_price ?: $item->product->price) * $item->quantity;
         });
 
-        $shipping = 30000; // Fixed shipping fee
+        // Use configured shipping settings
+        $freeThreshold = (int) setting('free_shipping_amount', 2000000);
+        $defaultShipping = (int) setting('shipping_fee', 30000);
+
+        // If subtotal reaches free shipping threshold, set shipping to 0
+        $shipping = ($subtotal >= $freeThreshold) ? 0 : $defaultShipping;
         $total = $subtotal + $shipping;
 
         return view('checkout', compact('cartItems', 'subtotal', 'shipping', 'total'));

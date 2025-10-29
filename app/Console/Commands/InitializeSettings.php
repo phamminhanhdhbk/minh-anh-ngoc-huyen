@@ -82,7 +82,7 @@ class InitializeSettings extends Command
             ],
             [
                 'key' => 'contact_email',
-                'value' => 'info@shopvo.com',
+                'value' => 'minhanh.itqn@gmail.com',
                 'type' => 'email',
                 'group' => 'contact',
                 'label' => 'Email liên hệ',
@@ -102,7 +102,7 @@ class InitializeSettings extends Command
             // Social
             [
                 'key' => 'social_facebook',
-                'value' => 'https://facebook.com/shopvo',
+                'value' => 'https://facebook.com/vietnhat365',
                 'type' => 'url',
                 'group' => 'social',
                 'label' => 'Facebook URL',
@@ -111,7 +111,7 @@ class InitializeSettings extends Command
             ],
             [
                 'key' => 'social_instagram',
-                'value' => 'https://instagram.com/shopvo',
+                'value' => 'https://instagram.com/vietnhat365',
                 'type' => 'url',
                 'group' => 'social',
                 'label' => 'Instagram URL',
@@ -120,7 +120,7 @@ class InitializeSettings extends Command
             ],
             [
                 'key' => 'social_twitter',
-                'value' => 'https://twitter.com/shopvo',
+                'value' => 'https://twitter.com/vietnhat365',
                 'type' => 'url',
                 'group' => 'social',
                 'label' => 'Twitter URL',
@@ -129,7 +129,7 @@ class InitializeSettings extends Command
             ],
             [
                 'key' => 'social_zalo',
-                'value' => 'https://zalo.me/shopvo',
+                'value' => 'https://zalo.me/vietnhat365',
                 'type' => 'url',
                 'group' => 'social',
                 'label' => 'Zalo URL',
@@ -138,7 +138,7 @@ class InitializeSettings extends Command
             ],
             [
                 'key' => 'social_youtube',
-                'value' => 'https://youtube.com/@shopvo',
+                'value' => 'https://youtube.com/vietnhat365',
                 'type' => 'url',
                 'group' => 'social',
                 'label' => 'YouTube URL',
@@ -147,7 +147,7 @@ class InitializeSettings extends Command
             ],
             [
                 'key' => 'social_tiktok',
-                'value' => 'https://www.tiktok.com/@shopvo',
+                'value' => 'https://www.tiktok.com/vietnhat365',
                 'type' => 'url',
                 'group' => 'social',
                 'label' => 'TikTok URL',
@@ -158,7 +158,7 @@ class InitializeSettings extends Command
             // Business
             [
                 'key' => 'business_hours',
-                'value' => 'Thứ 2 - Chủ nhật: 8:00 - 22:00',
+                'value' => 'Thứ 2 - Chủ nhật: 8:00 - 23:00',
                 'type' => 'text',
                 'group' => 'business',
                 'label' => 'Giờ làm việc',

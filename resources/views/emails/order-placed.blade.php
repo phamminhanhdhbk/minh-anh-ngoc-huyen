@@ -136,6 +136,25 @@
                     <td style="text-align: right;">{{ number_format($item->total, 0, ',', '.') }}₫</td>
                 </tr>
                 @endforeach
+                <!-- Subtotal / Shipping / Tax breakdown -->
+                <tr>
+                    <td colspan="3" style="text-align: right;">Tạm tính:</td>
+                    <td style="text-align: right;">{{ number_format($order->subtotal ?? 0, 0, ',', '.') }}₫</td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="text-align: right;">Phí vận chuyển:</td>
+                    <td style="text-align: right;">
+                        @if(isset($order->shipping) && $order->shipping == 0)
+                            <span style="color: #28a745; font-weight: bold;">Miễn phí</span>
+                        @else
+                            {{ number_format($order->shipping ?? 0, 0, ',', '.') }}₫
+                        @endif
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="text-align: right;">Thuế:</td>
+                    <td style="text-align: right;">{{ number_format($order->tax ?? 0, 0, ',', '.') }}₫</td>
+                </tr>
                 <tr class="total-row">
                     <td colspan="3" style="text-align: right;">TỔNG CỘNG:</td>
                     <td style="text-align: right; color: #28a745;">{{ number_format($order->total, 0, ',', '.') }}₫</td>
