@@ -81,7 +81,8 @@ class BlogController extends Controller
         $popularPosts = Post::published()->orderBy('views', 'desc')->take(5)->get();
         $tags = PostTag::withCount('posts')->orderBy('name')->get();
 
-        return view('blog.show', compact('post', 'relatedPosts', 'comments', 'categories', 'popularPosts', 'tags'));
+        return view('blog.show', compact('post', 'relatedPosts', 'comments', 'categories', 'popularPosts', 'tags'))
+                    ->with('seoModel', $post);
     }
 
     /**

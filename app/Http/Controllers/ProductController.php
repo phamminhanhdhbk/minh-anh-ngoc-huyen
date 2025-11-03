@@ -76,6 +76,7 @@ class ProductController extends Controller
             ->limit(4)
             ->get();
 
-        return view('products.show', compact('product', 'relatedProducts'));
+        return view('products.show', compact('product', 'relatedProducts'))
+                    ->with('seoModel', $product);
     }
 }
