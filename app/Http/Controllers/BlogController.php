@@ -19,10 +19,12 @@ class BlogController extends Controller
                     ->published()
                     ->orderBy('published_at', 'desc');
 
+        $currentCategory = null;
+        
         // Filter by category
         if ($request->has('category')) {
-            $category = BlogCategory::where('slug', $request->category)->firstOrFail();
-            $query->where('blog_category_id', $category->id);
+            $currentCategory = BlogCategory::where('slug', $request->category)->firstOrFail();
+            $query->where('blog_category_id', $currentCategory->id);
         }
 
         // Filter by tag
@@ -49,7 +51,7 @@ class BlogController extends Controller
         $popularPosts = Post::published()->orderBy('views', 'desc')->take(5)->get();
         $tags = PostTag::withCount('posts')->orderBy('name')->get();
 
-        return view('blog.index', compact('posts', 'categories', 'featuredPosts', 'popularPosts', 'tags'));
+        return view('blog.index', compact('posts', 'categories', 'featuredPosts', 'popularPosts', 'tags', 'currentCategory'));
     }
 
     /**

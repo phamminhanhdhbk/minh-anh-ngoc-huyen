@@ -682,6 +682,18 @@
     .flash-sale-banner .col {
         width: 25%;
     }
+
+    .navbar-dark .navbar-nav .nav-link {
+    color: rgb(255 255 255 / 98%);
+}
+
+.bg-success {
+    --bs-bg-opacity: 1;
+    background-color: rgba(var(--bs-success-rgb), var(--bs-bg-opacity)
+1
+) !important;
+}
+    
 }
 </style>
 @endpush

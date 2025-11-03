@@ -1,24 +1,18 @@
 @extends('layouts.app')
 
-@section('title', 'Blog - ' . config('app.name'))
+@section('title', ($currentCategory ? $currentCategory->name : '') . ' - ' . config('app.name'))
 
 @section('content')
 <div class="container py-5">
     <div class="row">
         <div class="col-lg-8">
             <h1 class="mb-4">
-                <i class="fas fa-blog"></i> Blog
+                <i class="fas fa-blog"></i> {{ $currentCategory ? $currentCategory->name : '' }}
             </h1>
-
-            @if(request('search'))
-                <div class="alert alert-info">
-                    Kết quả tìm kiếm cho: "<strong>{{ request('search') }}</strong>"
-                </div>
-            @endif
 
             @if(request('category'))
                 <div class="alert alert-info">
-                    Danh mục: <strong>{{ request('category') }}</strong>
+                    Danh mục: <strong> {{ $currentCategory ? $currentCategory->name : '' }}</strong>
                 </div>
             @endif
 
