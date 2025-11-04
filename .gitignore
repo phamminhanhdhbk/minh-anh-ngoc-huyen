@@ -44,6 +44,7 @@ yarn-error.log
 !/storage/logs/.gitignore
 /public/uploads/*
 !/public/uploads/.gitignore
+/storage_link
 
 # Testing
 .phpunit.result.cache
