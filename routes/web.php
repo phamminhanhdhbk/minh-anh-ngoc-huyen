@@ -53,6 +53,10 @@ Route::middleware('auth')->group(function () {
 // Public review routes
 Route::get('/products/{product}/reviews', 'ReviewController@productReviews')->name('reviews.product');
 
+// Contact routes
+Route::get('/contact', 'ContactController@index')->name('contact.index');
+Route::post('/contact', 'ContactController@store')->name('contact.store');
+
 // Blog routes (public)
 Route::get('/blog', 'BlogController@index')->name('blog.index');
 Route::get('/blog/{slug}', 'BlogController@show')->name('blog.show');
@@ -101,6 +105,13 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     // Notification Emails
     Route::resource('notification-emails', 'Admin\NotificationEmailController');
     Route::post('notification-emails/{notificationEmail}/toggle', 'Admin\NotificationEmailController@toggleStatus')->name('notification-emails.toggle');
+
+    // Contacts Management
+    Route::get('contacts', 'Admin\ContactController@index')->name('contacts.index');
+    Route::get('contacts/{contact}', 'Admin\ContactController@show')->name('contacts.show');
+    Route::delete('contacts/{contact}', 'Admin\ContactController@destroy')->name('contacts.destroy');
+    Route::patch('contacts/{contact}/mark-read', 'Admin\ContactController@markAsRead')->name('contacts.mark-read');
+    Route::patch('contacts/{contact}/mark-unread', 'Admin\ContactController@markAsUnread')->name('contacts.mark-unread');
 
     // Reviews Management
     Route::get('reviews', 'Admin\ReviewController@index')->name('reviews.index');
