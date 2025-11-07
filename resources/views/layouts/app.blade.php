@@ -374,6 +374,11 @@
                                 <i class="fas fa-blog me-1"></i>Blog
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('contact.index') }}">
+                                <i class="fas fa-envelope me-1"></i>Liên hệ
+                            </a>
+                        </li>
                     </ul>
                 @endif
 

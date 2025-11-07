@@ -257,7 +257,20 @@
                     </a>
                 </li>
 
-                <hr class="my-3" style="border-color: rgba(255,255,255,0.2);">
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.contacts.*') ? 'active' : '' }}"
+                       href="{{ route('admin.contacts.index') }}">
+                        <i class="fas fa-address-book me-2"></i>Liên Hệ
+                        @php
+                            $unreadCount = \App\Contact::where('is_read', false)->count();
+                        @endphp
+                        @if($unreadCount > 0)
+                            <span class="badge bg-danger ms-2">{{ $unreadCount }}</span>
+                        @endif
+                    </a>
+                </li>
+
+                <hr class="my-3" style="border-color: rgba(255,255,255,0.2);";
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('home') }}" target="_blank">
